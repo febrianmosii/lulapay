@@ -1,0 +1,5 @@
+fields:
+    invoice_code:
+        label: Invoice
+        span: auto
+        type: text

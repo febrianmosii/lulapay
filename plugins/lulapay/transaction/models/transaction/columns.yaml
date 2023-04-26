@@ -1,0 +1,20 @@
+columns:
+    id:
+        label: ID
+        type: number
+        searchable: true
+    invoice_code:
+        label: 'Invoice No.'
+        type: text
+        searchable: true
+        sortable: true
+    total:
+        label: Total
+        type: number
+        searchable: true
+        sortable: true
+    transaction_status_id:
+        label: Status
+        type: text
+        searchable: true
+        sortable: true

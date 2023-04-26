@@ -1,0 +1,10 @@
+name: Transactions
+form: $/lulapay/transaction/models/transaction/fields.yaml
+modelClass: Lulapay\Transaction\Models\Transaction
+defaultRedirect: lulapay/transaction/transactions
+create:
+    redirect: 'lulapay/transaction/transactions/update/:id'
+    redirectClose: lulapay/transaction/transactions
+update:
+    redirect: lulapay/transaction/transactions
+    redirectClose: lulapay/transaction/transactions

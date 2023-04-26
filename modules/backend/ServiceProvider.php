@@ -105,14 +105,6 @@ class ServiceProvider extends ModuleServiceProvider
                     'url'         => Backend::url('backend'),
                     'permissions' => ['backend.access_dashboard'],
                     'order'       => 10
-                ],
-                'media' => [
-                    'label'       => 'backend::lang.media.menu_label',
-                    'icon'        => 'icon-folder',
-                    'iconSvg'     => 'modules/backend/assets/images/media-icon.svg',
-                    'url'         => Backend::url('backend/media'),
-                    'permissions' => ['media.*'],
-                    'order'       => 200
                 ]
             ]);
         });

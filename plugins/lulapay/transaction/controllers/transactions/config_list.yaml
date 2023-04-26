@@ -1,0 +1,12 @@
+list: $/lulapay/transaction/models/transaction/columns.yaml
+modelClass: Lulapay\Transaction\Models\Transaction
+title: Transactions
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'lulapay/transaction/transactions/update/:id'
