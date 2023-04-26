@@ -1,0 +1,6 @@
+plugin:
+    name: 'lulapay.merchant::lang.plugin.name'
+    description: 'lulapay.merchant::lang.plugin.description'
+    author: Lulapay
+    icon: oc-icon-building-o
+    homepage: ''

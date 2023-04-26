@@ -1,0 +1,6 @@
+plugin:
+    name: 'lulapay.transaction::lang.plugin.name'
+    description: 'lulapay.transaction::lang.plugin.description'
+    author: Lulapay
+    icon: oc-icon-money
+    homepage: ''

@@ -1,0 +1,17 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table lulapay_transaction_transactions'
+    - builder_table_create_lulapay_transaction_transactions.php
+1.0.3:
+    - 'Created table lulapay_transaction_transaction_details'
+    - builder_table_create_lulapay_transaction_transaction_details.php
+1.0.4:
+    - 'Created table lulapay_transaction_statuses'
+    - builder_table_create_lulapay_transaction_statuses.php
+1.0.5:
+    - 'Created table lulapay_transaction_payment_methods'
+    - builder_table_create_lulapay_transaction_payment_methods.php
+1.0.6:
+    - 'Created table lulapay_transaction_customers'
+    - builder_table_create_lulapay_transaction_customers.php

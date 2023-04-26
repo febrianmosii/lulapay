@@ -1,0 +1,6 @@
+plugin:
+    name: 'lulapay.paymentgateway::lang.plugin.name'
+    description: 'lulapay.paymentgateway::lang.plugin.description'
+    author: Lulapay
+    icon: oc-icon-connectdevelop
+    homepage: ''
