@@ -1,2 +1,20 @@
+# OctoberCMS specific
+/vendor/
+/storage/
+.htaccess
+/october.log
+
+# Laravel specific
+/bootstrap/cache/
+.env
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# Misc
+node_modules/
+.idea/
+*.swp
 .DS_Store
-*.log
