@@ -9,3 +9,6 @@
 1.0.4:
     - 'Created table lulapay_merchant_payment_accounts'
     - builder_table_create_lulapay_merchant_payment_accounts.php
+1.0.5:
+    - 'Updated table lulapay_merchant_merchants'
+    - builder_table_update_lulapay_merchant_merchants.php

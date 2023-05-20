@@ -1,6 +1,44 @@
 fields:
     name:
         label: Name
+        span: full
+        required: 1
+        type: text
+    address:
+        label: Address
+        span: full
+        required: 1
+        type: textarea
+        size: small
+    admin_email:
+        label: Email
         span: auto
         required: 1
         type: text
+    admin_phone:
+        label: Phone
+        span: auto
+        required: 1
+        type: text
+    notif_callback_url:
+        label: Notification Callback URL
+        span: full
+        comment: Notif url callback will be used as webhook post callback to get the transaction status update
+        required: 1
+        type: text
+    public_key:
+        label: Public Key (auto generated)
+        disabled: 1
+        span: auto
+        type: text
+    server_key:
+        label: Server Key (auto generated)
+        disabled: 1
+        span: auto
+        type: text
+    logo:
+        label: Logo
+        type: fileupload
+        mode: image
+        imageHeight: 200
+        imageWidth: 200

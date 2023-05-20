@@ -4,3 +4,15 @@ columns:
         type: text
         searchable: true
         sortable: true
+    admin_email:
+        label: Email
+        searchable: true
+        sortable: true
+    admin_phone:
+        label: Phone
+        searchable: true
+        sortable: true
+    address:
+        label: Address
+        searchable: true
+        sortable: true

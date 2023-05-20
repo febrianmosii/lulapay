@@ -1,5 +1,6 @@
 <?php namespace Lulapay\Merchant\Models;
 
+use Ramsey\Uuid\Uuid;
 use Model;
 
 /**
@@ -24,4 +25,15 @@ class Merchant extends Model
      */
     public $rules = [
     ];
+
+
+    public $attachOne = [
+        'logo' => 'System\Models\File'
+    ];
+
+    public function beforeSave() 
+    {
+        $this->public_key = Uuid::uuid4()->toString();
+        $this->server_key = Uuid::uuid4()->toString();
+    }   
 }
