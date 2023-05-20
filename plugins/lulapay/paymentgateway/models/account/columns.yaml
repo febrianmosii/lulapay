@@ -1,0 +1,17 @@
+columns:
+    name:
+        label: Name
+        type: text
+        searchable: true
+        sortable: true
+    merchant_key:
+        label: Merchant Key
+        searchable: true
+        sortable: true
+    provider_name:
+        relation: provider
+        label: Provider
+        select: name
+        type: text
+        searchable: true
+        sortable: true

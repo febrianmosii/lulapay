@@ -99,6 +99,8 @@ class Plugin extends PluginBase
 
     public function registerNavigation()
     {
+        return [];
+        
         return [
             'user' => [
                 'label'       => 'rainlab.user::lang.users.menu_label',

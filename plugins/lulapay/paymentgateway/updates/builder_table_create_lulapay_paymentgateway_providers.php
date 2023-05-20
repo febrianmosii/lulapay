@@ -12,7 +12,7 @@ class BuilderTableCreateLulapayPaymentgatewayProviders extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name', 12);
-            $table->string('code', 2);
+            $table->string('code', 12);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();

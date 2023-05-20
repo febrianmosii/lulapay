@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Account
+
+# Model Form Field configuration
+form: $/lulapay/paymentgateway/models/account/fields.yaml
+
+# Model Class name
+modelClass: Lulapay\PaymentGateway\Models\Account
+
+# Default redirect location
+defaultRedirect: lulapay/paymentgateway/accounts
+
+# Create page
+create:
+    title: Create Account
+    redirect: lulapay/paymentgateway/accounts/update/:id
+    redirectClose: lulapay/paymentgateway/accounts
+
+# Update page
+update:
+    title: Edit Account
+    redirect: lulapay/paymentgateway/accounts
+    redirectClose: lulapay/paymentgateway/accounts
+
+# Preview page
+preview:
+    title: Preview Account

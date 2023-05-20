@@ -1,0 +1,15 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    payment_gateway_provider_id:
+        label: Provider
+        modelClass: Lulapay\PaymentGateway\Models\Provider
+        conditions: payment_gateway_provider_id in (:filtered)
+        nameFrom: name
+    payment_method_type_id:
+        label: Method Type
+        modelClass: Lulapay\Transaction\Models\PaymentMethodType
+        conditions: payment_method_type_id in (:filtered)
+        nameFrom: name

@@ -1,0 +1,30 @@
+fields:
+    provider:
+        label: Provider
+        type: recordfinder
+        list: $/lulapay/paymentgateway/models/provider/columns.yaml
+        recordsPerPage: 10
+        title: 'Find Record'
+        required: 1
+    name:
+        label: Name
+        span: full
+        required: 1
+        type: text
+    api_host:
+        label: API Host (Base URL)
+        span: full
+        required: 1
+        type: text
+    merchant_key:
+        label: 'Merchant Key'
+        span: full
+        type: text
+    client_key:
+        label: 'Client Key'
+        span: auto
+        type: text
+    server_key:
+        label: 'Server Key'
+        span: auto
+        type: text

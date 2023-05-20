@@ -15,6 +15,6 @@ class Transactions extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('Lulapay.Transaction', 'transaction', 'transaction');
+        BackendMenu::setContext('Lulapay.Transaction', 'transaction', 'transactions');
     }
 }

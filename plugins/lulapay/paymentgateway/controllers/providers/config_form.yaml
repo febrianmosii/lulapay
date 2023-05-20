@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Provider
+
+# Model Form Field configuration
+form: $/lulapay/paymentgateway/models/provider/fields.yaml
+
+# Model Class name
+modelClass: Lulapay\PaymentGateway\Models\Provider
+
+# Default redirect location
+defaultRedirect: lulapay/paymentgateway/providers
+
+# Create page
+create:
+    title: Create Provider
+    redirect: lulapay/paymentgateway/providers/update/:id
+    redirectClose: lulapay/paymentgateway/providers
+
+# Update page
+update:
+    title: Edit Provider
+    redirect: lulapay/paymentgateway/providers
+    redirectClose: lulapay/paymentgateway/providers
+
+# Preview page
+preview:
+    title: Preview Provider

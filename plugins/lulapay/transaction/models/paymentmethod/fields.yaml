@@ -1,0 +1,31 @@
+fields:
+    payment_gateway_provider:
+        label: Provider
+        type: recordfinder
+        list: $/lulapay/paymentgateway/models/provider/columns.yaml
+        recordsPerPage: 10
+        title: 'Find Record'
+        required: 1
+    payment_method_type:
+        label: 'Method Type'
+        type: recordfinder
+        list: ~/plugins/lulapay/transaction/models/paymentmethodtype/columns.yaml
+        recordsPerPage: 10
+        title: 'Find Record'
+        required: 1
+    name:
+        label: Name
+        span: left
+        required: 1
+        type: text
+    code:
+        label: Code
+        span: right
+        required: 1
+        type: text
+    logo:
+        label: Logo
+        type: fileupload
+        mode: image
+        imageHeight: 200
+        imageWidth: 200

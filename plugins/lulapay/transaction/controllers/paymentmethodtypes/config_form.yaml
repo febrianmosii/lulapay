@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Payment Method Type
+
+# Model Form Field configuration
+form: $/lulapay/transaction/models/paymentmethodtype/fields.yaml
+
+# Model Class name
+modelClass: Lulapay\Transaction\Models\PaymentMethodType
+
+# Default redirect location
+defaultRedirect: lulapay/transaction/paymentmethodtypes
+
+# Create page
+create:
+    title: Create Payment Method Type
+    redirect: lulapay/transaction/paymentmethodtypes/update/:id
+    redirectClose: lulapay/transaction/paymentmethodtypes
+
+# Update page
+update:
+    title: Edit Payment Method Type
+    redirect: lulapay/transaction/paymentmethodtypes
+    redirectClose: lulapay/transaction/paymentmethodtypes
+
+# Preview page
+preview:
+    title: Preview Payment Method Type

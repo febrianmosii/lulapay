@@ -15,3 +15,15 @@
 1.0.6:
     - 'Created table lulapay_transaction_customers'
     - builder_table_create_lulapay_transaction_customers.php
+1.0.7:
+    - 'Created table lulapay_transaction_payment_method_types'
+    - builder_table_create_lulapay_transaction_payment_method_types.php
+1.0.8:
+    - 'Updated table lulapay_transaction_payment_methods'
+    - builder_table_update_lulapay_transaction_payment_methods.php
+1.0.9:
+    - 'Updated table lulapay_transaction_payment_methods'
+    - builder_table_update_lulapay_transaction_payment_methods_2.php
+1.0.10:
+    - 'Updated table lulapay_transaction_payment_methods'
+    - builder_table_update_lulapay_transaction_payment_methods_3.php

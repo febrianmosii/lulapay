@@ -1,0 +1,10 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    provider_id:
+        label: Provider
+        modelClass: Lulapay\PaymentGateway\Models\Provider
+        conditions: provider_id in (:filtered)
+        nameFrom: name

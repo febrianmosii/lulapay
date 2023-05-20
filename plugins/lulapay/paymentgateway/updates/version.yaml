@@ -6,3 +6,12 @@
 1.0.3:
     - 'Created table lulapay_paymentgateway_providers'
     - builder_table_create_lulapay_paymentgateway_providers.php
+1.0.4:
+    - 'Updated table lulapay_paymentgateway_providers'
+    - builder_table_update_lulapay_paymentgateway_providers.php
+1.0.5:
+    - 'Updated table lulapay_paymentgateway_providers'
+    - builder_table_update_lulapay_paymentgateway_providers_2.php
+1.0.6:
+    - 'Updated table lulapay_paymentgateway_accounts'
+    - builder_table_update_lulapay_paymentgateway_accounts.php

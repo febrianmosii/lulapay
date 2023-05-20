@@ -39,10 +39,22 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-money',
                 'permissions' => ['lulapay.transaction.*'],
                 'sideMenu' => [
-                    'transaction' => [
+                    'transactions' => [
                         'label' => 'Transactions',
                         'icon'  => 'icon-money',
                         'url'   => Backend::url('lulapay/transaction/transactions'),
+                        // 'permissions' => ['lulapay.transaction.access_transaction']
+                    ],
+                    'paymentmethod' => [
+                        'label' => 'Payment Method',
+                        'icon'  => 'icon-credit-card',
+                        'url'   => Backend::url('lulapay/transaction/paymentmethods'),
+                        // 'permissions' => ['lulapay.transaction.access_transaction']
+                    ],
+                    'paymentmethodtypes' => [
+                        'label' => 'Payment Method Types',
+                        'icon'  => 'icon-cog',
+                        'url'   => Backend::url('lulapay/transaction/paymentmethodtypes'),
                         // 'permissions' => ['lulapay.transaction.access_transaction']
                     ],
                 ]

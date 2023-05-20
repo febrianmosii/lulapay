@@ -1,0 +1,18 @@
+columns:
+    logo:
+        label: Logo
+        type: partial   
+        path: ~/plugins/lulapay/transaction/models/paymentmethod/_logo.htm
+    name:
+        label: Name
+        type: text
+        searchable: true
+        sortable: true
+    payment_method_name:
+        label: Method Type
+        relation: payment_method_type
+        select: name
+    payment_gateway_provider_name:
+        label: Payment Gateway Prpvoder
+        relation: payment_gateway_provider
+        select: name

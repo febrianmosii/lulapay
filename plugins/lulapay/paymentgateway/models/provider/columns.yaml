@@ -1,0 +1,11 @@
+columns:
+    name:
+        label: Provider
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: Code
+        type: text
+        searchable: true
+        sortable: true

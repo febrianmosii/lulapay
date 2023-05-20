@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Merchant
+
+# Model Form Field configuration
+form: $/lulapay/merchant/models/merchant/fields.yaml
+
+# Model Class name
+modelClass: Lulapay\Merchant\Models\Merchant
+
+# Default redirect location
+defaultRedirect: lulapay/merchant/merchants
+
+# Create page
+create:
+    title: Create Merchant
+    redirect: lulapay/merchant/merchants/update/:id
+    redirectClose: lulapay/merchant/merchants
+
+# Update page
+update:
+    title: Edit Merchant
+    redirect: lulapay/merchant/merchants
+    redirectClose: lulapay/merchant/merchants
+
+# Preview page
+preview:
+    title: Preview Merchant
