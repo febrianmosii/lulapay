@@ -45,7 +45,7 @@ class Plugin extends PluginBase
                         'url'   => Backend::url('lulapay/transaction/transactions'),
                         // 'permissions' => ['lulapay.transaction.access_transaction']
                     ],
-                    'paymentmethod' => [
+                    'paymentmethods' => [
                         'label' => 'Payment Method',
                         'icon'  => 'icon-credit-card',
                         'url'   => Backend::url('lulapay/transaction/paymentmethods'),

@@ -31,6 +31,6 @@ class PaymentMethod extends Model
     ];
 
     public $attachOne = [
-        'avatar' => 'System\Models\File'
+        'logo' => 'System\Models\File'
     ];
 }
