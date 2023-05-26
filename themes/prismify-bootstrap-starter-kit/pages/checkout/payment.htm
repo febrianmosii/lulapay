@@ -1,0 +1,19 @@
+url        = "/pay"
+layout     = "default"
+title      = "Pay"
+meta_title = "Pay"
+meta_description = "Process your payment - Pay page."
+custom_body_class = "centered-screen no-bg no-footer"
+==
+<div class="card text-center">
+  {% set back_link = 'checkout/index'|page %}
+  {% partial 'app/head-title' back_link=back_link title="Pembayaran Tagihan" %}
+  
+  <div class="card-body checkout">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png">
+    <div class="alert alert-primary mt-4 pd-2" role="alert">
+      Anda akan diarahkan ke halaman Bank Mandiri untuk menyelesaikan pembayaran
+    </div>
+    <a href="#" class="btn btn-primary pay-btn">Bayar Tagihan</a>
+  </div>
+</div>

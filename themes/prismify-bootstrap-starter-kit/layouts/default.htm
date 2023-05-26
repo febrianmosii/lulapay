@@ -10,6 +10,7 @@ description = "Default layout"
     <meta name="title" content="{{ this.page.meta_title }}">
     <meta name="author" content="{{ this.theme.config.author }}">
     <link rel="icon" type="image/png" href="{{ 'assets/images/favicon.ico'|theme }}">
+    <link rel="stylesheet" href="{{ 'assets/font-awesome/css/all.min.css'|theme }}">
     <link rel="stylesheet" href="{{ 'assets/css/app.css'|theme }}">
     <link rel="stylesheet" href="{{ 'assets/css/lulapay.css'|theme }}">
     {% styles %}
@@ -21,9 +22,6 @@ description = "Default layout"
   </head>
   <body class="app {{ 'layout-'~this.layout.id }} {{ 'page-'~this.page.id }} {{ this.page.custom_body_class }} ">
     <div class="app-container">
-      <header id="app-header" class="app-header">
-        {% partial 'app/header' %}
-      </header>
       <main id="app-content" class="app-content" role="main">
         {% partial 'app/content' %}
       </main>

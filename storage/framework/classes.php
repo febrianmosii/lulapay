@@ -100,4 +100,8 @@
   'Lulapay\\PaymentGateway\\Models\\Account' => 'plugins/lulapay/paymentgateway/models/Account.php',
   'lulapay\\merchant\\Controllers\\merchants' => 'plugins/lulapay/merchant/controllers/merchants.php',
   'Lulapay\\Merchant\\Models\\Merchant' => 'plugins/lulapay/merchant/models/Merchant.php',
+  'Lulapay\\Transaction\\Controllers\\Transactions' => 'plugins/lulapay/transaction/controllers/Transactions.php',
+  'Lulapay\\Transaction\\Classes\\AuthMiddleware' => 'plugins/lulapay/transaction/classes/AuthMiddleware.php',
+  'Lulapay\\Transaction\\Models\\Customer' => 'plugins/lulapay/transaction/models/Customer.php',
+  'Lulapay\\Transaction\\Models\\TransactionDetail' => 'plugins/lulapay/transaction/models/TransactionDetail.php',
 );

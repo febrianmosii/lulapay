@@ -1,6 +1,7 @@
 <?php namespace Lulapay\Transaction\Models;
 
 use Model;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Model
@@ -13,6 +14,21 @@ class Transaction extends Model
 
     protected $dates = ['deleted_at'];
 
+    public $fillable = [
+        'invoice_code',
+        'merchant_id',
+        'customer_id',
+        'payment_method_id',
+        'total',
+        'total_charged',
+        'transaction_hash',
+        'transaction_status_id',
+        'items'
+    ];
+
+    public $hasMany = [
+        'transaction_details' => ['Lulapay\Transaction\Models\TransactionDetail']
+    ];
 
     /**
      * @var string The database table used by the model.
@@ -24,4 +40,13 @@ class Transaction extends Model
      */
     public $rules = [
     ];
+
+    public function beforeSave() 
+    {
+    }
+    
+    public function beforeCreate() {
+        $this->transaction_hash      = Uuid::uuid4()->toString();
+        $this->transaction_status_id = 1; # Set default as Pending for the first time
+    }
 }

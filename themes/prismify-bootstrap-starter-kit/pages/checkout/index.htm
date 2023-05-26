@@ -3,19 +3,17 @@ layout     = "default"
 title      = "Checkout"
 meta_title = "Checkout"
 meta_description = "Process your payment - checkout page."
-custom_body_class = "centered-screen"
+custom_body_class = "centered-screen no-bg no-footer"
 ==
-<div class="container">
-  <div class="row">
-    <div class="col-md-4 col-xs-4 col-sm-4">
-      Bank Mega
+<div class="card text-center">
+  {% set back_link = 'cart/index'|page %}
+  {% partial 'app/head-title' back_link=back_link title="Konfirmasi Pembayaran" %}
+  
+  <div class="card-body checkout">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png">
+    <div class="alert alert-primary mt-4 pd-2" role="alert">
+      Anda akan diarahkan ke halaman Bank Mandiri untuk menyelesaikan pembayaran
     </div>
-    <div class="col-md-8 col-xs-8 col-sm-8 text-end">
-      <img src="https://akcdn.detik.net.id/payment/6b13ae54-3d73-4d9f-a842-2b3f4c7037d9.png" alt="logo-bank" width="200">
-    </div>
+    <a href="{{ 'checkout/payment'|page }}" class="btn btn-primary pay-btn">Bayar Tagihan</a>
   </div>
-  <div class="box-card no-shade row">
-    Anda akan diarahkan ke halaman Bank Mega  untuk menyelesaikan pembayaran                        <div class="clearfix"></div>
-  </div>
-</div>  
 </div>
