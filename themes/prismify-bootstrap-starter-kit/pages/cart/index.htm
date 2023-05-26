@@ -1,8 +1,10 @@
-url        = "/cart"
+url        = "/transaction/:transactionHash/cart"
 layout     = "default"
 title      = "Cart"
 meta_title = "Cart"
 meta_description = "Process your payment - cart page."
+
+[transaction]
 ==
 <div class="card">
   {% set back_link = 'index'|page %}
@@ -19,80 +21,88 @@ meta_description = "Process your payment - cart page."
               <div class="customer_column-left fl">
                   Nama                        </div>
               <div class="customer_column-right fl">
-                  DetikCom User
+                  {{ customer.name }}
               </div>
           </div>
           <div class="clearfix">
               <div class="customer_column-left fl">
                   Alamat Email                        </div>
               <div class="customer_column-right fl">
-                  febrianaries@gmail.com
+                {{ customer.email }}
               </div>
           </div>
           <div class="clearfix">
               <div class="customer_column-left fl">
                   Nomor Telepon                        </div>
               <div class="customer_column-right fl">
-                  8213123
+                {{ customer.phone }}
               </div>
           </div>
       </div>
     </div>
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            Items
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Item Name</th>
+                  <th scope="col">Qty</th>
+                  <th scope="col">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% set total = 0 %}
+                {% for key, item in items %}
+                {% set total = total + (item.quantity * item.price) %}
+
+                <tr>
+                  <th scope="row">{{ key + 1}}</th>
+                  <td>{{ item.item_name}}</td>
+                  <td class="text-end">{{ item.quantity }}</td>
+                  <td class="text-end">Rp. {{ item.price | number_format(0) }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr class="caption">
+                  <th scope="row">Total</th>
+                  <td colspan="3" class="text-end">Rp. {{ total | number_format(0) }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="list-group">
-      <h6 class="mt-4">Transfer Bank</h6>
-      <a href="{{ 'checkout/index'|page }}" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="row">
-          <div class="col-md-3" style="align-self: center;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png" style="max-width: 100%;" alt="">
-          </div>
-          <div class="col-md-9">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">Bank Mandiri</h5>
+      {% for key, method_groups in payment_methods %}
+        <h6 class="mt-4">{{ key }}</h6>
+
+        {% for method in method_groups %}
+          <a href="{{ 'checkout/index'|page({methodId: method.id, transactionHash: transaction_hash }) }}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="row">
+              <div class="col-md-3" style="align-self: center;">
+                <img src="{{ method.logo }}" style="max-width: 100%;" alt="">
+              </div>
+              <div class="col-md-9">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">{{ method.name }}</h5>
+                  <small class="text-muted">{{ method.provider }}</small>
+                </div>
+                <p class="mb-1">{{ method.description }}</small>
+              </div>
             </div>
-            <p class="mb-1">Pembayaran dapat melalui ATM Mandiri, Mandiri Online, Internet Banking, atau Teller Bank Mandiri.</small>
-          </div>
-        </div>
-      </a>
-      <h6 class="mt-4">Transfer Bank</h6>
-      <a href="{{ 'checkout/index'|page }}" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="row">
-          <div class="col-md-3" style="align-self: center;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png" style="max-width: 100%;" alt="">
-          </div>
-          <div class="col-md-9">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">Bank BCA</h5>
-            </div>
-            <p class="mb-1">Pembayaran dapat melalui ATM BCA, BCA Online, Internet Banking, atau Teller Bank BCA.</small>
-          </div>
-        </div>
-      </a>
-      <a href="{{ 'checkout/index'|page }}" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="row">
-          <div class="col-md-3" style="align-self: center;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png" style="max-width: 100%;" alt="">
-          </div>
-          <div class="col-md-9">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">Bank Mandiri</h5>
-            </div>
-            <p class="mb-1">Pembayaran dapat melalui ATM Mandiri, Mandiri Online, Internet Banking, atau Teller Bank Mandiri.</small>
-          </div>
-        </div>
-      </a>
-      <a href="{{ 'checkout/index'|page }}" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="row">
-          <div class="col-md-3" style="align-self: center;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png" style="max-width: 100%;" alt="">
-          </div>
-          <div class="col-md-9">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">Bank Mandiri</h5>
-            </div>
-            <p class="mb-1">Pembayaran dapat melalui ATM Mandiri, Mandiri Online, Internet Banking, atau Teller Bank Mandiri.</small>
-          </div>
-        </div>
-      </a>
+          </a>
+        {% endfor %}
+      {% endfor %}  
     </div>
   </div>
 </div>

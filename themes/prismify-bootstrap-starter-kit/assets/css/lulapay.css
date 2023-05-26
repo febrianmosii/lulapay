@@ -151,3 +151,12 @@ body {
 .back-btn:hover {
     color: #636363;
 }
+
+.accordion-item {
+    border: 1px solid #cecece !important;
+}
+
+.accordion-button:focus, .accordion-button:not(.collapsed) {
+    background-color: #fff !important;
+    color: #000 !important;
+}

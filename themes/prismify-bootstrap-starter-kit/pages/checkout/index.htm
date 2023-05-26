@@ -1,18 +1,19 @@
-url        = "/checkout"
+url        = "/:transactionHash/checkout/:methodId"
 layout     = "default"
 title      = "Checkout"
 meta_title = "Checkout"
 meta_description = "Process your payment - checkout page."
 custom_body_class = "centered-screen no-bg no-footer"
+
+[transaction]
 ==
 <div class="card text-center">
-  {% set back_link = 'cart/index'|page %}
-  {% partial 'app/head-title' back_link=back_link title="Konfirmasi Pembayaran" %}
+  {% partial 'app/head-title' backlink=back_link_url title="Konfirmasi Pembayaran" %}
   
   <div class="card-body checkout">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png">
+    <img src="{{ payment_method.logo.getPath() }}">
     <div class="alert alert-primary mt-4 pd-2" role="alert">
-      Anda akan diarahkan ke halaman Bank Mandiri untuk menyelesaikan pembayaran
+      Anda akan diarahkan ke halaman pembayaran {{ payment_method.name }} untuk menyelesaikan pembayaran
     </div>
     <a href="{{ 'checkout/payment'|page }}" class="btn btn-primary pay-btn">Bayar Tagihan</a>
   </div>

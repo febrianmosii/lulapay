@@ -82,12 +82,14 @@ class Transactions extends Controller
             $transaction->transaction_details()->createMany($this->transactionData['items']);
             
             $cmsController = new CMS_Controller();
-            $checkoutUrl   = $cmsController->pageUrl('cart/index');
+            $checkoutUrl   = $cmsController->pageUrl('cart/index', ['transactionHash' => $transaction->transaction_hash]);
+
+            DB::commit();
 
             return Response::json([
                 'error'        => false,
                 'message'      => 'Transaction Created Successfully',
-                'redirect_url' => $checkoutUrl.'?transaction-id='.$transaction->transaction_hash
+                'redirect_url' => $checkoutUrl
             ], 201);
         } catch (\Throwable $th) {
             dd($th);

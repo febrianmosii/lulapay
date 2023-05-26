@@ -16,6 +16,9 @@ class Plugin extends PluginBase
 
     public function registerComponents()
     {
+        return [
+            '\Lulapay\Transaction\Components\Transaction' => 'transaction'
+        ];
     }
 
     public function registerSettings()

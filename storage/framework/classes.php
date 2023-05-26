@@ -104,4 +104,5 @@
   'Lulapay\\Transaction\\Classes\\AuthMiddleware' => 'plugins/lulapay/transaction/classes/AuthMiddleware.php',
   'Lulapay\\Transaction\\Models\\Customer' => 'plugins/lulapay/transaction/models/Customer.php',
   'Lulapay\\Transaction\\Models\\TransactionDetail' => 'plugins/lulapay/transaction/models/TransactionDetail.php',
+  'Lulapay\\Transaction\\Components\\Transaction' => 'plugins/lulapay/transaction/components/Transaction.php',
 );

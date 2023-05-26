@@ -1,5 +1,6 @@
 <?php namespace Lulapay\Transaction\Models;
 
+use Lulapay\Merchant\Models\Merchant;
 use Model;
 use Ramsey\Uuid\Uuid;
 
@@ -24,6 +25,14 @@ class Transaction extends Model
         'transaction_hash',
         'transaction_status_id',
         'items'
+    ];
+
+    /**
+     * Relations
+     */
+    public $belongsTo = [ 
+        'merchant' => 'Lulapay\Merchant\Models\Merchant',
+        'customer' => 'Lulapay\Transaction\Models\Customer'
     ];
 
     public $hasMany = [
