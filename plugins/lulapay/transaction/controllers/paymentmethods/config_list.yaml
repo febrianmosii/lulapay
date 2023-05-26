@@ -34,9 +34,9 @@ filter: config_filter.yaml
 
 
 # Default sorting column
-# defaultSort:
-#     column: created_at
-#     direction: desc
+defaultSort:
+    column: id
+    direction: desc
 
 # Display checkboxes next to each record
 showCheckboxes: true

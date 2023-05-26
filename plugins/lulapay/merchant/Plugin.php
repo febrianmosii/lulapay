@@ -5,6 +5,13 @@ use Backend;
 
 class Plugin extends PluginBase
 {
+    public function boot()
+    {
+        \Backend\FormWidgets\Relation::extend(function ($widget) {
+            $widget->addViewPath(base_path() . '/plugins/lulapay/partials/widgets/form/partials');
+        });
+    }
+
     public function registerComponents()
     {
     }

@@ -42,3 +42,11 @@ fields:
         mode: image
         imageHeight: 200
         imageWidth: 200
+tabs:
+    fields:
+        payment_methods:
+            commentAbove: Select available payment method for this merchant
+            quickselect: true
+            type: checkboxlist
+            tab: Payment Methods
+            grouped: true

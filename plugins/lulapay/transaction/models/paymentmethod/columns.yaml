@@ -3,6 +3,7 @@ columns:
         label: Logo
         type: partial   
         path: ~/plugins/lulapay/transaction/models/paymentmethod/_logo.htm
+        sortable: false
     name:
         label: Name
         type: text

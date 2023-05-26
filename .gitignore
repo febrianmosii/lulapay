@@ -1,6 +1,8 @@
 # OctoberCMS specific
 /vendor/
-/storage/
+/storage/framework/
+/storage/cms/
+/storage/logs/
 .htaccess
 /october.log
 
