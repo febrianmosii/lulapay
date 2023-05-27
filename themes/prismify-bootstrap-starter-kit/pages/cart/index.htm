@@ -6,10 +6,10 @@ meta_description = "Process your payment - cart page."
 
 [transaction]
 ==
+{% if not is_expired %}
 <div class="card">
   {% set back_link = 'index'|page %}
   {% partial 'app/head-title' back_link=back_link title="Pilih Metode Pembayaran" %}
-
 
   <div class="card-body checkout">
     <div class="customer mb20 mt10">
@@ -106,3 +106,6 @@ meta_description = "Process your payment - cart page."
     </div>
   </div>
 </div>
+{% else %}
+  {% partial 'app/error' error='expired_transaction' %}
+{% endif %}

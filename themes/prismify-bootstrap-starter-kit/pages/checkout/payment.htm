@@ -1,19 +1,128 @@
-url        = "/pay"
+url        = "/:transactionHash/pay/:methodId"
 layout     = "default"
 title      = "Pay"
 meta_title = "Pay"
 meta_description = "Process your payment - Pay page."
-custom_body_class = "centered-screen no-bg no-footer"
+
+[transaction]
 ==
-<div class="card text-center">
-  {% set back_link = 'checkout/index'|page %}
-  {% partial 'app/head-title' back_link=back_link title="Pembayaran Tagihan" %}
+<div class="card">
+  {% partial 'app/head-title' backlink=back_link_url title="Konfirmasi Pembayaran" %}
   
-  <div class="card-body checkout">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png">
-    <div class="alert alert-primary mt-4 pd-2" role="alert">
-      Anda akan diarahkan ke halaman Bank Mandiri untuk menyelesaikan pembayaran
+  <div class="card-body checkout text-center">
+    <img src="{{ payment_method.logo.getPath() }}">
+    <div class="row payment-box">
+      <div class="box-card no-shade no-bold expiration-alert">
+        Segera lakukan pembayaran sebelum <br><strong>28 May 2023 02:13</strong>
+      </div>
+      <div class="va-info">
+        <p class="invoice-title">Virtual Account</p>
+        <div class="input-group mb-3">
+          <span class="form-control" id="virtualAccount">123456789</span>
+          <button class="btn btn-secondary btn-sm" type="button" id="copyVirtualAccount">Copy</button>
+        </div>
+      </div>
+      <div class="va-info">
+        <p class="invoice-title">Total Tagihan</p>
+        <div class="input-group mb-3">
+          <span class="form-control" id="chargeAmount">100</span>
+          <button class="btn btn-secondary btn-sm" type="button" id="copyChargeAmount">Copy</button>
+        </div>
+      </div>
     </div>
-    <a href="#" class="btn btn-primary pay-btn">Bayar Tagihan</a>
+
+    <a href="{{ 'checkout/payment'|page }}" class="btn btn-primary"><i class="fa fa-refresh"></i> Check Status Pembayaran</a>
+
+    <div class="text-start mt-4">
+      <div class="text-muted">INFO</div>
+      <small>Pembayaran akan otomatis terverifikasi paling lambat 10 menit setelah transaksi berhasil.</small>
+    </div>
+
+    <div class="text-muted text-start mt-3 mb-2">Cara Pembayaran</div>
+    <div class="accordion text-start" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            ATM
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <div class="accord-content">
+              <ol class="how-to">
+                  <li>Masukkan kartu ATM dan PIN</li>
+                  <li>Pilih Pembayaran Melalui VA</li>
+                  <li>Masukkan <strong>70012</strong> sebagai kode perusahaan Midtrans, lalu pilih <strong>Benar</strong></li>
+                  <li>Masukkan 12 kode pembayaran <strong>817763255197  </strong>, lalu pilih tombol <strong>Benar</strong></li>
+                  <li>Masukkan Angka <strong>1</strong> untuk memilih tagihan, lalu pilih tombol <strong>Ya</strong></li>
+                  <li>Akan muncul konfirmasi pembayaran, lalu pilih tombol <strong>Ya</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Internet Banking
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <ol class="how-to">
+              <li>Buka website bank yang Anda gunakan</li>
+              <li>Masukkan User ID dan PIN Internet Banking</li>
+              <li>Lakukan pembayaran menggunakan VA</li>
+              <li>Masukkan 12 kode pembayaran <strong>817763255197</strong>, lalu pilih <strong>Lanjutkan</strong></li>
+              <li>Pastikan detail pembayaran sudah sesuai lalu pilih <strong>Lanjutkan</strong></li>
+              <li>Validasi pembayaran dengan memasukkan PIN lalu klik <strong>Kirim</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Mobile Banking  
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <ol class="how-to">
+              <li>Lakukan log in pada aplikasi Mobile Banking bank yang Anda gunakan</li>
+              <li>Pada Penyedia Jasa pilih <strong>Midtrans</strong></li>
+              <li>Pada Kode Bayar masukkan 12 kode pembayaran <strong>521689351412</strong>, lalu pilih <strong>Lanjut</strong></li>
+              <li>Setelah muncul tagihan, pilih <strong>Konfirmasi</strong></li>
+              <li>Masukkan PIN</li>
+              <li>Pembayaran selesai. Simpan notifikasi yang muncul sebagai bukti pembayaran</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+{% put scripts %}
+<script>
+  $(document).ready(function () {
+    $("#copyVirtualAccount").click(function () {
+      var virtualAccount = $("#virtualAccount").val();
+      navigator.clipboard.writeText(virtualAccount).then(function () {
+        alert("Virtual Account copied to clipboard: " + virtualAccount);
+      }).catch(function () {
+        alert("Unable to copy Virtual Account to clipboard.");
+      });
+    });
+
+    $("#copyChargeAmount").click(function () {
+      var chargeAmount = $("#chargeAmount").val();
+      navigator.clipboard.writeText(chargeAmount).then(function () {
+        alert("Charge Amount copied to clipboard: " + chargeAmount);
+      }).catch(function () {
+        alert("Unable to copy Charge Amount to clipboard.");
+      });
+    });
+});
+</script>
+{% endput %}

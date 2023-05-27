@@ -21,6 +21,7 @@ class Transaction extends Model
         'customer_id',
         'payment_method_id',
         'total',
+        'expired_time',
         'total_charged',
         'transaction_hash',
         'transaction_status_id',
@@ -55,7 +56,20 @@ class Transaction extends Model
     }
     
     public function beforeCreate() {
+        $this->expired_time          =  date('Y-m-d H:i:s', strtotime('+ 30 minutes'));
         $this->transaction_hash      = Uuid::uuid4()->toString();
         $this->transaction_status_id = 1; # Set default as Pending for the first time
+    }
+
+    public function isExpired() 
+    {
+        $now = date('Y-m-d H:i:s');
+        
+        // If 30 minutes, then set as expired transaction
+        if ($now >= $this->expired_time) {
+            return true;
+        }
+
+        return false;
     }
 }

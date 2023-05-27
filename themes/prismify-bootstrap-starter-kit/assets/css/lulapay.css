@@ -160,3 +160,31 @@ body {
     background-color: #fff !important;
     color: #000 !important;
 }
+
+.expiration-alert {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.payment-box {
+    padding: 20px;
+}
+
+.invoice-title {
+    font-weight: 700;
+}
+
+.no-border {
+    border: 0;
+}
+
+.va-info .input-group {
+    padding: 0 35px;
+}
+.va-info .input-group span {
+    border: 1px solid #dedede;
+}
+
+.how-to li {
+    margin-bottom: 15px;
+}

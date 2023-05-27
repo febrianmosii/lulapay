@@ -36,9 +36,15 @@ class Transaction extends ComponentBase
             $this->cartPage();
         } else if ($currentPageUrl === 'Checkout') {
             $this->checkOutPage();
+        } else if ($currentPageUrl === 'Pay') {
+            $this->payPage();
         }
     }
 
+    public function payPage() 
+    {
+        dd('q');
+    }
     public function cartPage() 
     {
         $paymentMethods  = [];
@@ -59,6 +65,7 @@ class Transaction extends ComponentBase
             $paymentMethods[$groupName][$method->id]['logo']        = $method->logo->getThumb(80, 25);
         }
         
+        $this->page['is_expired']       = $this->transaction->isExpired();
         $this->page['customer']         = $this->transaction->customer;
         $this->page['payment_methods']  = $paymentMethods;
         $this->page['transaction_hash'] = $this->transaction->transaction_hash;
@@ -67,8 +74,9 @@ class Transaction extends ComponentBase
 
     public function checkoutPage() 
     {
-        $this->page['back_link_url']  = $this->pageUrl('cart/index', ['transactionHash' => $this->transaction->transaction_hash]);;
-        $this->page['payment_method'] = $this->payment_method;
+        $this->page['back_link_url']    = $this->pageUrl('cart/index', ['transactionHash' => $this->transaction->transaction_hash]);;
+        $this->page['payment_method']   = $this->payment_method;
+        $this->page['transaction_hash'] = $this->transaction->transaction_hash;
     }
 
     

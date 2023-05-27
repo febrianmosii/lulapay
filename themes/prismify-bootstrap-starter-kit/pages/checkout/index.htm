@@ -15,6 +15,6 @@ custom_body_class = "centered-screen no-bg no-footer"
     <div class="alert alert-primary mt-4 pd-2" role="alert">
       Anda akan diarahkan ke halaman pembayaran {{ payment_method.name }} untuk menyelesaikan pembayaran
     </div>
-    <a href="{{ 'checkout/payment'|page }}" class="btn btn-primary pay-btn">Bayar Tagihan</a>
+    <a href="{{ 'checkout/payment'|page({methodId: payment_method.id, transactionHash: transaction_hash }) }}" class="btn btn-primary pay-btn">Bayar Tagihan</a>
   </div>
 </div>
