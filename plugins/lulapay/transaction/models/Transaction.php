@@ -32,12 +32,15 @@ class Transaction extends Model
      * Relations
      */
     public $belongsTo = [ 
-        'merchant' => 'Lulapay\Merchant\Models\Merchant',
-        'customer' => 'Lulapay\Transaction\Models\Customer'
+        'payment_method'     => 'Lulapay\Transaction\Models\PaymentMethod',
+        'transaction_status' => 'Lulapay\Transaction\Models\Status',
+        'merchant'           => 'Lulapay\Merchant\Models\Merchant',
+        'customer'           => 'Lulapay\Transaction\Models\Customer'
     ];
 
     public $hasMany = [
-        'transaction_details' => ['Lulapay\Transaction\Models\TransactionDetail']
+        'transaction_details' => ['Lulapay\Transaction\Models\TransactionDetail'],
+        'transaction_logs' => ['Lulapay\Transaction\Models\TransactionLog']
     ];
 
     /**
@@ -71,5 +74,10 @@ class Transaction extends Model
         }
 
         return false;
+    }
+
+    public function onCheckStatus()
+    {
+        
     }
 }

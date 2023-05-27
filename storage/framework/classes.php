@@ -105,4 +105,6 @@
   'Lulapay\\Transaction\\Models\\Customer' => 'plugins/lulapay/transaction/models/Customer.php',
   'Lulapay\\Transaction\\Models\\TransactionDetail' => 'plugins/lulapay/transaction/models/TransactionDetail.php',
   'Lulapay\\Transaction\\Components\\Transaction' => 'plugins/lulapay/transaction/components/Transaction.php',
+  'Lulapay\\Transaction\\Models\\TransactionLog' => 'plugins/lulapay/transaction/models/TransactionLog.php',
+  'Lulapay\\Transaction\\Models\\Status' => 'plugins/lulapay/transaction/models/Status.php',
 );

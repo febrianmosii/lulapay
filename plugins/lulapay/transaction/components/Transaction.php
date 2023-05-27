@@ -1,8 +1,10 @@
 <?php namespace Lulapay\Transaction\Components;
 
 use Cms\Classes\ComponentBase;
+use Lulapay\PaymentGateway\Models\Account;
 use Lulapay\Transaction\Models\Transaction as TransactionModel;
 use Lulapay\Transaction\Models\PaymentMethod;
+use Lulapay\Transaction\Models\TransactionLog;
 
 class Transaction extends ComponentBase
 {
@@ -43,8 +45,30 @@ class Transaction extends ComponentBase
 
     public function payPage() 
     {
-        dd('q');
+        // Validate what provider is selected
+        $provider = $this->payment_method->payment_gateway_provider->code;
+
+        if ($provider === 'midtrans') {
+            $response = $this->processMidtransPayment();
+
+            if (isset($response->permata_va_number)) {
+                $vaNumber = $response->permata_va_number;
+            } elseif (isset($response->va_numbers)) { // bca, bri, bni
+                $vaNumber = $response->va_numbers[0]->va_number;
+            } elseif (isset($response->bill_key)) {
+                $vaNumber = $response->bill_key;
+            }
+    
+            $this->page['payment_method'] = $this->transaction->payment_method;
+            $this->page['status']         = $this->transaction->transaction_status()->getLabel();
+            $this->page['order_id']       = explode('|', $response->order_id)[0];
+            $this->page['amount_charged'] = $response->gross_amount;
+            $this->page['expiry_time']    = date('d F Y H:i:s', strtotime($response->expiry_time));
+            $this->page['va_numeber']     = $vaNumber;
+            
+        }
     }
+
     public function cartPage() 
     {
         $paymentMethods  = [];
@@ -98,5 +122,96 @@ class Transaction extends ComponentBase
         $transactionHash = $this->param('transactionHash');
 
         return TransactionModel::whereTransactionHash($transactionHash)->first();
+    }
+
+    private function processMidtransPayment()
+    {
+        $result['error'] = true;
+
+        // Check if already has request?
+        $transactionLog = TransactionLog::whereTransactionId($this->transaction->id)->whereType('TRX')->first();
+
+        if ($transactionLog) {
+            return json_decode($transactionLog->data);
+        }
+        
+        // Get midtrans provider account from database
+        $account = Account::whereHas('provider', function($q) {
+            $q->whereCode('midtrans');
+        })->first();
+
+        if ( ! $account) {
+            $result['message'] = 'Provider account not found';
+
+            return $result;
+        }
+        
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = $account->server_key;
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+
+        $transaction_details = array(
+            'order_id'     => $this->transaction->invoice_code.'|'.time(),
+            'gross_amount' => $this->transaction->total
+        );
+
+        // Populate items
+        $items = [];
+
+        foreach ($this->transaction->transaction_details as $key => $value) {
+            $items[] = [
+                'id'       => 'item-'.$key ,
+                'price'    => $value->price,
+                'quantity' => $value->quantity,
+                'name'     => $value->item_name
+            ];
+        }
+
+        // Populate customer's info
+        $customer_details = array(
+            'first_name' => $this->transaction->customer->name,
+            'last_name'  => '',
+            'email'      => $this->transaction->customer->email,
+            'phone'      => $this->transaction->customer->phone,
+        );
+
+        // Transaction data to be sent
+        $transaction_data = array(
+            'transaction_details' => $transaction_details,
+            'item_details'        => $items,
+            'customer_details'    => $customer_details
+        );
+
+        if ($this->payment_method->payment_method_type->code == 'bank-transfer') {
+            $transaction_data['payment_type'] = 'bank_transfer';
+    
+            if ($this->payment_method->code !== 'mandiri') {
+                $transaction_data['bank_transfer'] = [
+                    'bank' => $this->payment_method->code
+                ];
+            } else {             
+                $transaction_data['payment_type'] = 'echannel';
+                $transaction_data['echannel'] = [
+                    'bill_info1' => 'Payment for:',
+                    'bill_info2' => 'debt'
+                ];}
+        }
+
+        $response = \Midtrans\CoreApi::charge($transaction_data);
+
+        $log = [
+            'type'                  => 'TRX',
+            'transaction_status_id' => 1,
+            'data'                  => json_encode($response)
+        ];
+
+        $this->transaction->transaction_logs()->create($log);
+
+        $this->transaction->payment_method_id = $this->payment_method->id;
+        $this->transaction->save();
+        
+        return $response;
     }
 }
