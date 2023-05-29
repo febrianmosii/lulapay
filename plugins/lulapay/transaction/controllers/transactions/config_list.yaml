@@ -9,4 +9,6 @@ toolbar:
     buttons: list_toolbar
     search:
         prompt: 'backend::lang.list.search_prompt'
-recordUrl: 'lulapay/transaction/transactions/update/:id'
+recordUrl: lulapay/transaction/transactions/preview/:id
+# Filter
+filter: config_filter.yaml

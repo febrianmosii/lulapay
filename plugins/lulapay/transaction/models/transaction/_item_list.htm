@@ -1,0 +1,33 @@
+<?php
+    $data = \Lulapay\Transaction\Models\TransactionDetail::whereTransactionId($value)->get(); 
+?>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Item Name</th>
+        <th scope="col">Qty</th>
+        <th scope="col">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+        <?php
+            $total = 0;
+            foreach ($data as $key => $item) { 
+            $total += ($item->price * $item->quantity); ?>
+            <tr>
+                <th scope="row"><?= ($key + 1) ?></th>
+                <td><?= $item->item_name ?></td>
+                <td class="text-right"><?= $item->quantity  ?></td>
+                <td class="text-right">Rp. <?= number_format($item->price)  ?></td>
+            </tr>
+        <?php }
+        ?>
+    </tbody>
+    <tfoot>
+      <tr class="caption">
+        <th scope="row">Total</th>
+        <td colspan="3" class="text-right"><b>Rp. <?= number_format($total) ?></b></td>
+      </tr>
+    </tfoot>
+</table>

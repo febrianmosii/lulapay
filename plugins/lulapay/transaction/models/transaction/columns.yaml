@@ -1,11 +1,42 @@
 columns:
-    id:
-        label: ID
-        type: number
-        searchable: true
     invoice_code:
         label: 'Invoice No.'
         type: text
+        searchable: true
+        sortable: true
+    merchant_name:
+        label: 'Merchant'
+        type: text
+        relation: merchant
+        select: name
+        searchable: true
+        sortable: true
+    customer_name:
+        label: 'Customer'
+        type: text
+        relation: customer
+        select: name
+        searchable: true
+        sortable: true
+    customer_email:
+        label: 'Email'
+        type: text
+        relation: customer
+        select: email
+        searchable: true
+        sortable: true
+    customer_phone:
+        label: 'Phone'
+        type: text
+        relation: customer
+        select: phone
+        searchable: true
+        sortable: true
+    payment_method_name:
+        label: 'Payment Method'
+        type: text
+        relation: payment_method
+        select: name
         searchable: true
         sortable: true
     total:
@@ -13,8 +44,10 @@ columns:
         type: number
         searchable: true
         sortable: true
-    transaction_status_id:
+    transaction_status_name:
         label: Status
         type: text
+        relation: transaction_status
+        select: name
         searchable: true
         sortable: true

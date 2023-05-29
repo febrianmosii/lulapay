@@ -3,3 +3,33 @@ fields:
         label: Invoice
         span: auto
         type: text
+    merchant[name]:
+        label: 'Merchant'
+        type: text
+        span: right
+    customer[name]:
+        label: 'Customer'
+        type: text
+        span: full
+    customer[email]:
+        label: 'Email'
+        type: text
+        span: auto
+    customer[phone]:
+        label: 'Phone'
+        type: text
+        span: auto
+    payment_method[name]:
+        label: 'Payment Method'
+        type: text
+        span: auto
+    transaction_status[name]:
+        label: 'Transaction Status'
+        type: text
+        span: auto
+tabs:
+    fields:
+        id:
+            tab: "Item Detail"
+            type: partial
+            path: $/lulapay/transaction/models/transaction/_item_list.htm
