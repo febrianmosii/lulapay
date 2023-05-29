@@ -53,8 +53,9 @@ class Transaction extends ComponentBase
             
             $response = $this->processMidtransPayment();
             
-            $this->page['payment_method'] = $this->transaction->payment_method;
-            $this->page['status']         = $this->transaction->getStatusLabel();
+            $this->page['payment_method']        = $this->transaction->payment_method;
+            $this->page['transaction_status_id'] = $this->transaction->transaction_status_id;
+            $this->page['status']                = $this->transaction->getStatusLabel();
     
             // If credit card
             if ( ! empty($response->redirect_url)) {
