@@ -351,7 +351,16 @@ class Transaction extends ComponentBase
                     $transactionStatus = \Midtrans\Transaction::status($id);
     
                     if ( ! empty($transactionStatus->transaction_status)) {
-                        $transaction->setStatus($transactionStatus->transaction_status, 'midtrans');
+                        $status = $transaction->setStatus($transactionStatus->transaction_status, 'midtrans');
+
+                        $log = [
+                            'type'                  => 'User-RQ',
+                            'transaction_status_id' => $status,
+                            'data'                  => json_encode($transactionStatus)
+                        ];
+                
+                        $transaction->transaction_logs()->create($log);
+        
                     }
                 }
             }

@@ -5,3 +5,4 @@ Route::group(['middleware' => 'Lulapay\Transaction\Classes\AuthMiddleware'], fun
     Route::post('api/v1/transaction/create', 'Lulapay\Transaction\Controllers\Transactions@create');
 });
 
+Route::post('api/v1/transaction/notif/midtrans', 'Lulapay\Transaction\Controllers\Transactions@notifMidtrans');

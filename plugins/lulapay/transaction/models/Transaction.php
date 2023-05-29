@@ -116,6 +116,8 @@ class Transaction extends Model
                 $this->save();
             }
         }
+
+        return $this->transaction_status_id;
     }
 
     public function getStatusLabel() {

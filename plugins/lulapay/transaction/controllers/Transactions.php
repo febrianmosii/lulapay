@@ -3,6 +3,7 @@
 use Backend\Classes\Controller;
 use Cms\Classes\Controller as CMS_Controller;
 use BackendMenu;
+use Lulapay\PaymentGateway\Models\Account;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -26,6 +27,11 @@ class Transactions extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Lulapay.Transaction', 'transaction', 'transactions');
+    }
+
+    public function writeTrxLog() 
+    {
+
     }
 
     public function create(Request $request)
@@ -62,6 +68,18 @@ class Transactions extends Controller
                 'error'   => true,
                 'message' => 'Total charged is not match with the items total price'
             ], 400);
+        }
+
+        // Validate total
+        if ($transactionHash = $this->checkInvoiceCode()) {
+            $cmsController = new CMS_Controller();
+            $checkoutUrl   = $cmsController->pageUrl('cart/index', ['transactionHash' => $transactionHash]);
+
+            return Response::json([
+                'error'        => true,
+                'message'      => $this->transactionData['invoice_code'].' already has payment page',
+                'redirect_url' => $checkoutUrl
+            ], 200);
         }
         
         // Create TRX
@@ -131,5 +149,74 @@ class Transactions extends Controller
 
 
         return $totalCharged === $totalPrice;
+    }
+
+
+    private function checkInvoiceCode() 
+    {
+        $transaction = Transaction::whereInvoiceCode($this->transactionData['invoice_code'])->first();
+
+        return $transaction ? $transaction->transaction_hash : '';
+    }
+
+    public function notifMidtrans() 
+    {
+        // Get midtrans provider account from database
+        $account = Account::whereHas('provider', function($q) {
+            $q->whereCode('midtrans');
+        })->first();
+
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = $account->server_key;
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = env('MIDTRANS_PRODUCTION');
+
+        try {
+            $notif = new \Midtrans\Notification();
+
+            if ($notif ) {
+                $notif = $notif->getResponse();
+    
+                $invoiceCode = explode('|', $notif->order_id)[0];
+        
+                $transaction = Transaction::whereInvoiceCode($invoiceCode)->first();
+        
+                if ($transaction) {
+                    $status = $transaction->setStatus($notif->transaction_status, 'midtrans');
+        
+                    $log = [
+                        'type'                  => 'Notif-RS',
+                        'transaction_status_id' => $status,
+                        'data'                  => json_encode($notif)
+                    ];
+            
+                    $transaction->transaction_logs()->create($log);
+                }
+
+                return Response::json([
+                    'error'   => false,
+                    'message' => "Success",
+                    "data"    => $notif
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            $erroMessage = $e->getMessage();
+
+            if ($transaction) {
+                $log = [
+                    'type'                  => 'Notif-RS-Error',
+                    'transaction_status_id' => $status,
+                    'data'                  => json_encode($notif)
+                ];
+        
+                $transaction->transaction_logs()->create($log);
+            }
+
+            return Response::json([
+                'error'   => true,
+                'message' => $erroMessage
+            ], 500);
+        }
     }
 }
