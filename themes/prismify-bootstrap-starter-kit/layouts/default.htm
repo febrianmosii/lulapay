@@ -21,6 +21,20 @@ description = "Default layout"
     {% scripts %}
   </head>
   <body class="app {{ 'layout-'~this.layout.id }} {{ 'page-'~this.page.id }} {{ this.page.custom_body_class }} ">
+    {% if this.page.title != 'Checkout' %}
+    <!-- Preloader -->
+    <div class="preloader">
+      <div class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+    </div>
+    <!-- Preloader End --> 
+    {% endif %}
+
+  
     <div class="app-container">
       <main id="app-content" class="app-content" role="main">
         {% partial 'app/content' %}
@@ -29,6 +43,18 @@ description = "Default layout"
         {% partial 'app/footer' %}
       </footer>
     </div>
+
+    <script>
+        $('.pay-btn').on('click', function () {
+          $('.lds-ellipsis').fadeOut(); // will first fade out the loading animation
+        });
+
+        $(window).on('load', function () {
+            $('.lds-ellipsis').fadeOut(); // will first fade out the loading animation
+            $('.preloader').delay(333).fadeOut('slow'); // will fade out the white DIV that covers the website.
+            $('body').delay(333);
+        });
+    </script>
   </body>
   {% flash %}
     <p
