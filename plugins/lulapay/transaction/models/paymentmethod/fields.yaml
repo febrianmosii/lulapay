@@ -23,6 +23,12 @@ fields:
         span: right
         required: 1
         type: text
+    description:
+        label: Description
+        span: full
+        required: 1
+        type: textarea
+        size: small
     logo:
         label: Logo
         type: fileupload

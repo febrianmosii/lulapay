@@ -1,5 +1,8 @@
 <?php namespace Lulapay\Transaction\Components;
 
+use Redirect;
+use DB;
+use Flash;
 use Cms\Classes\ComponentBase;
 use Lulapay\PaymentGateway\Models\Account;
 use Lulapay\Transaction\Models\Transaction as TransactionModel;
@@ -24,53 +27,86 @@ class Transaction extends ComponentBase
             if ( ! $this->payment_method) {
                 $this->setStatusCode(404);
     
-                return \Redirect::to('/404');
+                return Redirect::to('/404');
             }
         }
         
         if ( ! $this->transaction) {
             $this->setStatusCode(404);
     
-            return \Redirect::to('/404');
+            return Redirect::to('/404');
         }
 
         if ($currentPageUrl === 'Cart') {
-            $this->cartPage();
+            return $this->cartPage();
         } else if ($currentPageUrl === 'Checkout') {
-            $this->checkOutPage();
+            return $this->checkOutPage();
         } else if ($currentPageUrl === 'Pay') {
-            $this->payPage();
+            return $this->payPage();
         }
     }
 
     public function payPage() 
     {
-        // Validate what provider is selected
-        $provider = $this->payment_method->payment_gateway_provider->code;
-
-        if ($provider === 'midtrans') {
-            $response = $this->processMidtransPayment();
-
-            if (isset($response->permata_va_number)) {
-                $vaNumber = $response->permata_va_number;
-            } elseif (isset($response->va_numbers)) { // bca, bri, bni
-                $vaNumber = $response->va_numbers[0]->va_number;
-            } elseif (isset($response->bill_key)) {
-                $vaNumber = $response->bill_key;
-            }
-    
-            $this->page['payment_method'] = $this->transaction->payment_method;
-            $this->page['status']         = $this->transaction->transaction_status()->getLabel();
-            $this->page['order_id']       = explode('|', $response->order_id)[0];
-            $this->page['amount_charged'] = $response->gross_amount;
-            $this->page['expiry_time']    = date('d F Y H:i:s', strtotime($response->expiry_time));
-            $this->page['va_numeber']     = $vaNumber;
+        try {
+            DB::beginTransaction();
             
+            $response = $this->processMidtransPayment();
+            
+            $this->page['payment_method'] = $this->transaction->payment_method;
+            $this->page['status']         = $this->transaction->getStatusLabel();
+    
+            // If credit card
+            if ( ! empty($response->redirect_url)) {
+                $this->page['redirect_url'] = $response->redirect_url;
+            } else {
+                $vaNumber = '';
+    
+                if (isset($response->permata_va_number)) {
+                    $vaNumber = $response->permata_va_number;
+                } elseif (isset($response->va_numbers)) { // bca, bri, bni
+                    $vaNumber = $response->va_numbers[0]->va_number;
+                } elseif (isset($response->bill_key)) {
+                    $vaNumber = $response->bill_key;
+                }
+        
+                $expiryTime = $response->expiry_time ?? '';
+
+                // Set default expiry time = 24 hours
+                if ( ! $expiryTime) {
+                    $expiryTime = date('d F Y H:i:s', strtotime($response->transaction_time.' + 1 day'));
+                }
+                
+                $this->page['deeplink_url']   = $this->getDeeplinkUrl($response);
+                $this->page['order_id']       = explode('|', $response->order_id)[0];
+                $this->page['amount_charged'] = $response->gross_amount;
+                $this->page['payment_code']   = $response->payment_code ?? '';
+                $this->page['merchant_id']    = $response->merchant_id ?? '';
+                $this->page['expiry_time']    = $expiryTime;
+                $this->page['va_number']      = $vaNumber;
+                $this->page['back_link_url']  = $this->pageUrl('cart/index', ['transactionHash' => $this->transaction->transaction_hash]);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e);
+            Flash::error($e->getMessage());
+            
+            return Redirect::back();;
         }
     }
 
     public function cartPage() 
     {
+        $isSelectedMethod = $this->isSelectedMethod();
+
+        if ($isSelectedMethod) {    
+            $payUrl    = $this->pageUrl('checkout/payment', ['transactionHash' => $this->transaction->transaction_hash, 'methodId' => $this->transaction->payment_method_id]);
+            
+            return Redirect::to($payUrl);
+        }
+        
         $paymentMethods  = [];
         $merchantMethods = $this->transaction->merchant->payment_methods()->get();
 
@@ -98,6 +134,14 @@ class Transaction extends ComponentBase
 
     public function checkoutPage() 
     {
+        $isSelectedMethod = $this->isSelectedMethod();
+
+        if ($isSelectedMethod) {    
+            $payUrl    = $this->pageUrl('checkout/payment', ['transactionHash' => $this->transaction->transaction_hash, 'methodId' => $this->transaction->payment_method_id]);
+            
+            return Redirect::to($payUrl);
+        }
+        
         $this->page['back_link_url']    = $this->pageUrl('cart/index', ['transactionHash' => $this->transaction->transaction_hash]);;
         $this->page['payment_method']   = $this->payment_method;
         $this->page['transaction_hash'] = $this->transaction->transaction_hash;
@@ -135,23 +179,8 @@ class Transaction extends ComponentBase
             return json_decode($transactionLog->data);
         }
         
-        // Get midtrans provider account from database
-        $account = Account::whereHas('provider', function($q) {
-            $q->whereCode('midtrans');
-        })->first();
-
-        if ( ! $account) {
-            $result['message'] = 'Provider account not found';
-
-            return $result;
-        }
+        $this->setConfigMidtrans();
         
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = $account->server_key;
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
-
         $transaction_details = array(
             'order_id'     => $this->transaction->invoice_code.'|'.time(),
             'gross_amount' => $this->transaction->total
@@ -177,29 +206,106 @@ class Transaction extends ComponentBase
             'phone'      => $this->transaction->customer->phone,
         );
 
-        // Transaction data to be sent
-        $transaction_data = array(
-            'transaction_details' => $transaction_details,
-            'item_details'        => $items,
-            'customer_details'    => $customer_details
-        );
+        $paymentCode     = $this->payment_method->code;
+        $paymentTypeCode = $this->payment_method->payment_method_type->code;
 
-        if ($this->payment_method->payment_method_type->code == 'bank-transfer') {
-            $transaction_data['payment_type'] = 'bank_transfer';
-    
-            if ($this->payment_method->code !== 'mandiri') {
-                $transaction_data['bank_transfer'] = [
-                    'bank' => $this->payment_method->code
-                ];
-            } else {             
-                $transaction_data['payment_type'] = 'echannel';
-                $transaction_data['echannel'] = [
-                    'bill_info1' => 'Payment for:',
-                    'bill_info2' => 'debt'
-                ];}
+        if ($paymentTypeCode === 'e-wallet') {
+            $transaction_data = array(
+                'transaction_details' => $transaction_details,
+                'payment_type'        => $paymentCode
+            );
+
+            if (in_array($paymentCode, ['shopeepay', 'qris'])) {
+                $transaction_data = array(
+                    'payment_type'        => $paymentCode,
+                    'transaction_details' => $transaction_details,
+                    'item_details'        => $items,
+                    'customer_details'    => $customer_details,
+                    'custom_expiry'       => [
+                        'expiry_duration' => 60,
+                        'unit'            => 'minute'
+                    ]         
+                );        
+
+                if ($paymentCode == 'shopeepay') {
+                    $transaction_data['shopeepay'] = [
+                        'callback_url' => "htt  ps://midtrans.com/"
+                    ];
+                } else {
+                    $transaction_data['qris'] = [
+                        'acquirer' => "gopay"
+                    ];
+                }
+            } else {
+                $transaction_data = array(
+                    'transaction_details' => $transaction_details,
+                    'payment_type'        => $paymentCode
+                );
+
+                if ($paymentCode === 'qris') {
+                    $transaction_data['acquirer'] = 'gopay';
+                }
+            }
+        } else if ($paymentTypeCode === 'over-the-counter') {
+            $transaction_data = array(
+                'payment_type'        => 'cstore',
+                'transaction_details' => $transaction_details,
+                'cstore'              => [
+                    'store' => 'alfamart',
+                    'message' => 'Pembayaran Lulapay'
+                ],
+                'custom_expiry'       => [
+                    'expiry_duration' => 24,
+                    'unit'            => 'hour'
+                ]         
+            );        
+        } else {
+            // Transaction data to be sent
+            $transaction_data = array(
+                'transaction_details' => $transaction_details,
+                'item_details'        => $items,
+                'customer_details'    => $customer_details,
+                'custom_expiry'       => [
+                    'expiry_duration' => 60,
+                    'unit'            => 'minute'
+                ]         
+            );
         }
 
-        $response = \Midtrans\CoreApi::charge($transaction_data);
+        if ($paymentTypeCode == 'bank-transfer') {
+            if ($paymentCode == 'permata') {
+                $transaction_data['payment_type'] = 'permata';
+            } else {
+                $transaction_data['payment_type'] = 'bank_transfer';
+        
+                if ($paymentCode !== 'mandiri') {
+                    $transaction_data['bank_transfer'] = [
+                        'bank' => $paymentCode
+                    ];
+                } else {             
+                    $transaction_data['payment_type'] = 'echannel';
+                    $transaction_data['echannel'] = [
+                        'bill_info1' => 'Payment for:',
+                        'bill_info2' => 'debt'
+                    ];
+                }
+            }
+        }
+
+        if ($paymentTypeCode == 'card-payment') {
+            $transaction_data['enabled_payments'] = [
+                'credit_card'
+            ];
+            
+            $transaction_data['credit_card'] = [
+                'secure' => true    
+            ];
+
+            
+            $response = \Midtrans\Snap::createTransaction($transaction_data);
+        } else {
+            $response = \Midtrans\CoreApi::charge($transaction_data);
+        }
 
         $log = [
             'type'                  => 'TRX',
@@ -213,5 +319,69 @@ class Transaction extends ComponentBase
         $this->transaction->save();
         
         return $response;
+    }
+
+    public function setConfigMidtrans() 
+    {
+        // Get midtrans provider account from database
+        $account = Account::whereHas('provider', function($q) {
+            $q->whereCode('midtrans');
+        })->first();
+
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = $account->server_key;
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = env('MIDTRANS_PRODUCTION');
+    }    
+
+    public function onCheckStatus()
+    {
+        $transactionHash = \Request::segment(2);
+
+        if ($transactionHash) {
+            $transaction = $this->getTrxByTransactionHash();
+            
+            if ($transaction) {
+                $id = $transaction->getMidtransTrxId();
+                
+                if ($id) {
+                    $this->setConfigMidtrans();
+
+                    $transactionStatus = \Midtrans\Transaction::status($id);
+    
+                    if ( ! empty($transactionStatus->transaction_status)) {
+                        $transaction->setStatus($transactionStatus->transaction_status, 'midtrans');
+                    }
+                }
+            }
+        }
+        
+        $this->page['status'] = $transaction->getStatusLabel();
+
+        Flash::success("Status telah diperbarui");
+    }
+
+    private function isSelectedMethod() 
+    {
+        return $this->transaction->payment_method_id ? true : false;
+    }
+
+    private function getDeeplinkUrl($array) 
+    {
+        $array = json_decode(json_encode($array), TRUE);
+
+        $result = '';
+
+        if ( ! empty($array['actions'])) {
+            foreach ($array['actions'] as $item) {
+                if ($item['name'] == 'deeplink-redirect') {
+                    $result = $item['url'];
+                    break;
+                }
+            }
+        }
+        
+        return $result;
     }
 }

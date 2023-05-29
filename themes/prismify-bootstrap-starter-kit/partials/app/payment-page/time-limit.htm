@@ -1,0 +1,8 @@
+{% if not message %}
+  {% set message = 'Segera lakukan pembayaran sebelum <br><strong>' ~ expiry_time ~ '</strong>' %}
+{% endif %}
+<div class="row payment-box">
+    <div class="box-card no-shade no-bold expiration-alert">
+      {{ message }}
+    </div>
+</div>

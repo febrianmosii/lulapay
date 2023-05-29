@@ -29,17 +29,4 @@ class Status extends Model
     public $rules = [
     ];
 
-
-    public function scopeGetLabel($data) {
-        $data = $data->first();
-
-        $className = [
-            1 => 'primary',
-            2 => 'success',
-            3 => 'warning',
-            4 => 'danger',
-        ];
-        
-        return '<span class="text-'.$className[$data->id].'">'.$data->name.'</span>';
-    }
 }

@@ -1,6 +1,6 @@
 <?php namespace Lulapay\Transaction\Models;
 
-use Lulapay\Merchant\Models\Merchant;
+use Lulapay\Transaction\Models\TransactionLog;
 use Model;
 use Ramsey\Uuid\Uuid;
 
@@ -80,4 +80,53 @@ class Transaction extends Model
     {
         
     }
+
+    public function getMidtransTrxId()
+    {
+        $data = TransactionLog::whereTransactionId($this->id)->whereType('TRX')->first();
+
+        if ($data) {
+            $trx = json_decode($data->data);
+
+            return isset($trx->transaction_id) ? $trx->transaction_id : '';
+        }
+
+        return null;
+    }
+
+    public function setStatus($status, $provider)
+    {
+        $mapStatusMidtrans = [
+            'pending'    => 1,
+            'success'    => 2,
+            'settlement' => 2,
+            'capture'    => 2,
+            'accept'     => 2,
+            'expire'     => 3,
+            'cancel'     => 3,
+            'deny'       => 4,
+            'void'       => 4
+        ];
+
+        if ($provider == 'midtrans') {
+            $status = $mapStatusMidtrans[$status] ?? '';
+
+            if ($status && $status !== $this->transaction_status_id) {
+                $this->transaction_status_id = $status;
+                $this->save();
+            }
+        }
+    }
+
+    public function getStatusLabel() {
+        $className = [
+            1 => 'primary',
+            2 => 'success',
+            3 => 'warning',
+            4 => 'danger',
+        ];
+        
+        return '<span class="text-'.$className[$this->transaction_status_id].'">'.$this->transaction_status->name.'</span>';
+    }
+
 }

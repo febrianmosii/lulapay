@@ -1,5 +1,8 @@
 <div class="card-header bg-white position-relative checkout-card">
-    <div class="float-start"><a href="{{ backlink }}" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>{{ title }}</div>
+    <div class="float-start">
+      {% if not no_back_url%}
+      <a href="{{ backlink }}" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+      {% endif %}{{ title }}</div>
     <div class="float-end">
       <img class="logo tab-logo d-block mx-auto mb-4 d-sm-none d-md-block d-none d-sm-block" src="{{ 'assets/images/logo.png'|theme }}" alt="">
     </div>

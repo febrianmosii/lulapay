@@ -1,0 +1,21 @@
+<div class="card">
+    {% partial 'app/head-title' no_back_url=true backlink=back_link_url title="Lakukan Pembayaran Anda" %}
+    
+    <div class="card-body checkout text-center">
+      <img src="{{ payment_method.logo.getPath() }}">
+    
+      {% partial 'app/payment-page/time-limit' message="Segera lakukan pembayaran Anda menggunakan kartu debit / credit card" %}
+
+      <a href="{{ redirect_url }}"  class="btn btn-success mb-4" target="_blank" data-request-flash>
+        <i class="fa fa-credit-card me-1"></i>
+        Bayar Sekarang</a>
+        
+      {% partial 'app/payment-page/btn-check-status' %}
+  
+      <div class="text-start mt-5">
+        <div class="text-muted">INFO</div>
+        <small>Pembayaran akan otomatis terverifikasi paling lambat 10 menit setelah transaksi berhasil.</small>
+      </div>
+
+    </div>
+</div>

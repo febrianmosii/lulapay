@@ -1,4 +1,4 @@
-url        = "/:transactionHash/checkout/:methodId"
+url        = "transaction/:transactionHash/checkout/:methodId"
 layout     = "default"
 title      = "Checkout"
 meta_title = "Checkout"
@@ -14,7 +14,8 @@ custom_body_class = "centered-screen no-bg no-footer"
     <img src="{{ payment_method.logo.getPath() }}">
     <div class="alert alert-primary mt-4 pd-2" role="alert">
       Anda akan diarahkan ke halaman pembayaran {{ payment_method.name }} untuk menyelesaikan pembayaran
-    </div>
+    </div>      
+    
     <a href="{{ 'checkout/payment'|page({methodId: payment_method.id, transactionHash: transaction_hash }) }}" class="btn btn-primary pay-btn">Bayar Tagihan</a>
   </div>
 </div>

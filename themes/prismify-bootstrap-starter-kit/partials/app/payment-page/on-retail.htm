@@ -1,0 +1,102 @@
+<div class="card">
+    {% partial 'app/head-title' no_back_url=true backlink=back_link_url title="Lakukan Pembayaran Anda" %}
+    
+    <div class="card-body checkout text-center">
+      <img src="{{ payment_method.logo.getPath() }}">
+      <div class="row payment-box">
+        
+        {% partial 'app/payment-page/time-limit' %}
+
+        <div class="va-info">
+          <p class="invoice-title">Kode Pembayaran</p>
+          <div class="input-group mb-3">
+            <span class="form-control" id="paymentCode">{{ payment_code }}</span>
+            <button class="btn btn-secondary btn-sm" type="button" id="copyPaymentCode">Copy</button>
+          </div>
+        </div>
+        
+        <div class="va-info">
+          <p class="invoice-title">Kode Merchant</p>
+          <div class="input-group mb-3">
+            <span class="form-control" id="merchantCode">{{ merchant_id }}</span>
+            <button class="btn btn-secondary btn-sm" type="button" id="copyMerchantCode">Copy</button>
+          </div>
+        </div>
+        
+        <div class="va-info">
+          <p class="invoice-title">Total Tagihan</p>
+          <div class="input-group mb-3">
+            <span class="form-control" id="chargeAmount">{{ amount_charged | number_format(0) }}</span>
+            <button class="btn btn-secondary btn-sm" type="button" id="copyChargeAmount">Copy</button>
+          </div>
+        </div>
+      </div>
+  
+      <div class="va-info" id="payment-status">
+        {% partial 'app/payment-status' %}
+      </div>
+  
+      {% partial 'app/payment-page/btn-check-status' %}
+  
+      <div class="text-start mt-4">
+        <div class="text-muted">INFO</div>
+        <small>Pembayaran akan otomatis terverifikasi paling lambat 10 menit setelah transaksi berhasil.</small>
+      </div>
+  
+      <div class="text-muted text-start mt-3 mb-2">Cara Pembayaran</div>
+      <div class="accordion text-start" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Retail Alfa Group
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <div class="accord-content">
+                <ol class="how-to">
+                    <li>Kunjungi toko retail Alfa group terdekat (Alfamart / Alfa Midi / Lawson)</li>
+                    <li>Lakukan transaksi pembayaran Midtrans, dengan kode pembayaran <strong>70012</strong></li>
+                    <li>Tunjukkan <strong>Kode Pembayaran</strong> dan <strong>Kode Merchant</strong> kepada kasir yang bertugas</li>
+                    <li>Lakukan pembayaran</li>
+                    <li>Simpan struk sebagai bukti pembayaran bila dibutuhkan</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% put scripts %}
+<script>
+$(document).ready(function () {
+    $("#copyPaymentCode").click(function () {
+        var paymentCode = $("#paymentCode").text();
+        navigator.clipboard.writeText(paymentCode).then(function () {
+            alert("Payment Code copied to clipboard: " + paymentCode);
+        }).catch(function () {
+            alert("Unable to copy Payment Code to clipboard.");
+        });
+    });
+    $("#copyMerchantCode").click(function () {
+        var paymentCode = $("#merchantCode").text();
+        navigator.clipboard.writeText(merchantCode).then(function () {
+            alert("Payment Code copied to clipboard: " + merchantCode);
+        }).catch(function () {
+            alert("Unable to copy Payment Code to clipboard.");
+        });
+    });
+
+    $("#copyChargeAmount").click(function () {
+        var chargeAmount = $("#chargeAmount").text();
+        navigator.clipboard.writeText(chargeAmount).then(function () {
+            alert("Charge Amount copied to clipboard: " + chargeAmount);
+        }).catch(function () {
+            alert("Unable to copy Charge Amount to clipboard.");
+        });
+    });
+});
+</script>
+{% endput %}
