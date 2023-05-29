@@ -6,9 +6,11 @@
     
       {% partial 'app/payment-page/time-limit' %}
 
-      <a href="{{ deeplink_url }}"  class="btn btn-success mb-4" target="_blank" data-request-flash>
-        <i class="fa fa-credit-card me-1"></i>
-        Bayar Sekarang</a>
+      {% if transaction_status_id == 1 %}
+        <a href="{{ deeplink_url }}"  class="btn btn-success mb-4" target="_blank" data-request-flash>
+          <i class="fa fa-credit-card me-1"></i>
+          Bayar Sekarang</a>
+      {% endif %}
       
       <div class="va-info" id="payment-status">
         {% partial 'app/payment-status' %}

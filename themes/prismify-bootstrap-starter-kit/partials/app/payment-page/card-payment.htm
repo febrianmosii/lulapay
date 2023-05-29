@@ -6,9 +6,11 @@
     
       {% partial 'app/payment-page/time-limit' message="Segera lakukan pembayaran Anda menggunakan kartu debit / credit card" %}
 
-      <a href="{{ redirect_url }}"  class="btn btn-success mb-4" target="_blank" data-request-flash>
-        <i class="fa fa-credit-card me-1"></i>
-        Bayar Sekarang</a>
+        {% if transaction_status_id == 1 %}
+        <a href="{{ redirect_url }}"  class="btn btn-success mb-4" target="_blank" data-request-flash>
+            <i class="fa fa-credit-card me-1"></i>
+            Bayar Sekarang</a>
+        {% endif %}
         
       {% partial 'app/payment-page/btn-check-status' %}
   
