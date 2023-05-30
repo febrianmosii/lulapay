@@ -23,20 +23,20 @@ description = "Default layout"
     {% scripts %}
   </head>
   <body class="app {{ 'layout-'~this.layout.id }} {{ 'page-'~this.page.id }} {{ this.page.custom_body_class }} ">
-    {% if this.page.title != 'Checkout' %}
     <!-- Preloader -->
-    <div class="preloader">
-      <div class="lds-ellipsis">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+    {% if this.page.title == 'Checkout' %}
+      {% set style = 'style="display: none;"'%}
+    {% endif %}
+    <div class="preloader" {{ style }}>
+      <div class="lds-ellipsis" {{ style }}>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
     <!-- Preloader End --> 
-    {% endif %}
 
-  
     <div class="app-container">
       <main id="app-content" class="app-content" role="main">
         {% partial 'app/content' %}
@@ -46,17 +46,28 @@ description = "Default layout"
       </footer>
     </div>
 
-    <script>
-        $('.pay-btn').on('click', function () {
-          $('.lds-ellipsis').fadeOut(); // will first fade out the loading animation
-        });
+    {% if this.page.title != 'Checkout' %}
+      <script>
+          $(window).on('load', function () {
+              $('.lds-ellipsis').fadeOut(); // will first fade out the loading animation
+              $('.preloader').delay(333).fadeOut('slow'); // will fade out the white DIV that covers the website.
+              $('body').delay(333);
+          });
+      </script>
+    {% else %}
+      <script>
+          $(window).on('load', function () {
+              $('.lds-ellipsis').fadeOut('fast'); // will first fade out the loading animation
+              $('.preloader').delay(0).fadeOut('fast'); // will fade out the white DIV that covers the website.
+              $('body').delay(0);
+          });
 
-        $(window).on('load', function () {
-            $('.lds-ellipsis').fadeOut(); // will first fade out the loading animation
-            $('.preloader').delay(333).fadeOut('slow'); // will fade out the white DIV that covers the website.
-            $('body').delay(333);
-        });
-    </script>
+          $('.pay-btn').on('click', function () {
+            $('.lds-ellipsis').fadeIn(); // will first fade out the loading animation
+            $('.preloader').delay(0).fadeIn('slow'); // will fade out the white DIV that covers the website.
+          });
+      </script>
+    {% endif %}
 
     {% placeholder scripts %}
   </body>

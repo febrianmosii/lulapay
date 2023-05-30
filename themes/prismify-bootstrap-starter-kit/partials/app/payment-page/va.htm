@@ -25,6 +25,10 @@
       </div>
   
       <div class="va-info" id="payment-status">
+        {% if midtrans_sandbox and payment_method.sandbox_simulator_url %}
+          <a href="{{ payment_method.sandbox_simulator_url }}" class="simulator-link" target="_blank">[Sandbox] Gunakan simulator untuk membayar</a>
+        {% endif %}
+        <p></p>
         {% partial 'app/payment-status' %}
       </div>
   

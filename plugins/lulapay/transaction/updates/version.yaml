@@ -57,3 +57,6 @@
 1.0.20:
     - 'Updated table lulapay_transaction_transaction_logs'
     - builder_table_update_lulapay_transaction_transaction_logs.php
+1.0.21:
+    - 'Updated table lulapay_transaction_payment_methods'
+    - builder_table_update_lulapay_transaction_payment_methods_7.php

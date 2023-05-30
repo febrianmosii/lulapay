@@ -53,6 +53,7 @@ class Transaction extends ComponentBase
             
             $response = $this->processMidtransPayment();
             
+            $this->page['midtrans_sandbox']      = env('MIDTRANS_PRODUCTION') === false;
             $this->page['payment_method']        = $this->transaction->payment_method;
             $this->page['transaction_status_id'] = $this->transaction->transaction_status_id;
             $this->page['status']                = $this->transaction->getStatusLabel();
