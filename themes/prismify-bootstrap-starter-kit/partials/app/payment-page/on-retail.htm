@@ -86,9 +86,9 @@ $(document).ready(function () {
         });
     });
     $("#copyMerchantCode").click(function () {
-        var paymentCode = $("#merchantCode").text();
+        var merchantCode = $("#merchantCode").text();
         navigator.clipboard.writeText(merchantCode).then(function () {
-            alert("Payment Code copied to clipboard: " + merchantCode);
+            alert("Merchant Code copied to clipboard: " + merchantCode);
         }).catch(function () {
             alert("Unable to copy Payment Code to clipboard.");
         });
