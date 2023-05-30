@@ -17,9 +17,9 @@ fields:
         label: Name
         span: left
         required: 1
-        type: text
     code:
         label: Code
+        type: text
         span: right
         required: 1
         type: text
@@ -29,6 +29,11 @@ fields:
         required: 1
         type: textarea
         size: small
+    sandbox_simulator_url:
+        label: Sandbox Simulator URL (if any)
+        span: full
+        required: 1
+        type: text
     logo:
         label: Logo
         type: fileupload
