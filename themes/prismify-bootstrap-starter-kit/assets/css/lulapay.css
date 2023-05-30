@@ -269,3 +269,24 @@ body {
   background: #fff;
 }
   
+.btn-demo {
+  font-size: 16px;
+  padding: 11px 23px;
+  background: #254aaf;
+  border-color: #ffffff;
+  font-weight: 700;
+  color: #f5ff1e;
+  border-radius: 20px;
+  letter-spacing: 2px;
+}
+.btn-demo:hover {
+  color: #f5ff1e;
+}
+.simulator input:read-only {
+  background: #f5f5f5;
+  cursor: default;
+}
+
+.hidden {
+  display: none !important;
+}

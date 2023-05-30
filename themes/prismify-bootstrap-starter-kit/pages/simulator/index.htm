@@ -1,0 +1,83 @@
+url        = "/transaction/simulator"
+layout     = "default"
+title      = "Transaction Simulator"
+meta_title = "Lulapay Transaction Simulator"
+meta_description = "Simulate your transaction using Lulapay API here."
+
+[simulator]
+==
+<div class="card simulator">
+  <div class="card-body checkout">
+    <div class="container">
+      <h1>Invoice Form</h1>
+      <form id="invoiceForm" data-request="simulator::onSubmit" data-request-success="redirectSuccess" method="POST" data-request-flash>
+        <div class="mb-3">
+          <label for="invoiceCode" class="form-label">Invoice Code</label>
+          <div class="row">
+            <div class="col-md-8 col-sm-8 col-sx-8">
+              <input type="text" class="form-control" id="invoiceCode" name="invoice_code" readonly>
+            </div>
+            <div class="col-md-4 col-sm-4 col-sx-4">
+              <a class="generate-invoice btn btn-primary"><i class="fa fa-refresh"></i> Generate</a>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name" value="Random Person" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" value="" required>
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="tel" class="form-control" id="phone" name="phone" value="082112345678" required>
+        </div>
+        <div id="itemsContainer">
+          <div class="mb-3 item">
+            <label for="item1" class="form-label">Item 1</label>
+            <select class="form-select item-name mb-2" name="items[0][item_name]" required>
+              <option value="" selected>Select an item</option>
+              <option value="Tshirt">Tshirt</option>
+              <option value="Hoodie">Hoodie</option>
+              <option value="Shoes">Shoes</option>
+              <option value="Jeans">Jeans</option>
+            </select>
+            <select class="form-select item-quantity mb-2" name="items[0][quantity]" required>
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            <input type="number" class="form-control item-price mb-2" name="items[0][price]" readonly>
+            <button type="button" class="btn btn-danger removeItem">Remove</button>
+            <hr>
+          </div>
+        </div>  
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-md-8 col-sm-8 col-sx-8">
+              <label for="totalCharged" class="form-label">Total Charged</label>
+            </div>
+            <div class="col-md-4 col-sm-4 col-sx-4 text-end">
+              <span id="total-charged"><strong>0</strong></span>
+            </div>
+          <input type="number" class="form-control hidden" id="totalCharged" name="total_charged" readonly>
+        </div>
+        <button type="button" id="addMore" class="btn btn-primary">Add More</button>
+        <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% put scripts %}
+  <script type="text/javascript" src="{{ 'assets/js/simulator.js'|theme }}"></script>
+{% endput %}

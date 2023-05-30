@@ -17,7 +17,9 @@ description = "Default layout"
     <script type="text/javascript" src="{{ 'assets/js/manifest.js'|theme }}"></script>
     <script type="text/javascript" src="{{ 'assets/js/vendor.js'|theme }}"></script>
     <script type="text/javascript" src="{{ 'assets/js/app.js'|theme }}"></script>
+    
     {% framework extras %}
+    
     {% scripts %}
   </head>
   <body class="app {{ 'layout-'~this.layout.id }} {{ 'page-'~this.page.id }} {{ this.page.custom_body_class }} ">
@@ -55,6 +57,8 @@ description = "Default layout"
             $('body').delay(333);
         });
     </script>
+
+    {% placeholder scripts %}
   </body>
   {% flash %}
     <p

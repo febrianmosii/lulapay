@@ -147,8 +147,7 @@ class Transactions extends Controller
             $totalPrice += $value['price'] * $value['quantity'];
         }
 
-
-        return $totalCharged === $totalPrice;
+        return $totalCharged == $totalPrice;
     }
 
 
