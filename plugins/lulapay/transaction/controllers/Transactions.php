@@ -230,7 +230,7 @@ class Transactions extends Controller
             
             $transaction = Transaction::whereHas('transaction_logs',function ($x) use ($transactionId) {
                 return $x->where('type', 'TRX')->where('data', 'LIKE', '%'.$transactionId.'%');
-            })->whereTransactionHash($transactionHash);
+            })->whereTransactionHash($transactionHash)->first();
 
             if ($transaction) {
                 if ( ! empty($transactionStatus)) {
