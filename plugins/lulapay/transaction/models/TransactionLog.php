@@ -13,6 +13,10 @@ class TransactionLog extends Model
 
     protected $dates = ['deleted_at'];
 
+    public $belongsTo = [ 
+        'transaction'     => 'Lulapay\Transaction\Models\Transaction'
+    ];
+    
     public $fillable = [
         'transaction_id',
         'type',

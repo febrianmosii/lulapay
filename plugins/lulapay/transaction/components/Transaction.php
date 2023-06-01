@@ -52,8 +52,8 @@ class Transaction extends ComponentBase
 
     public function thanksPage()
     {   
-        if ( ! empty($_GET['transaction-hash'])) {
-            $transaction = TransactionModel::whereTransactionHash($_GET['transaction-hash'])->first();
+        if ( ! empty($_GET['transaction_id'])) {
+            $transaction = TransactionLog::where('data', 'LIKE', '%'.$_GET['transaction_id'].'%')->first()->transaction;
 
             $provider = $transaction->payment_method->payment_gateway_provider->code;
 
