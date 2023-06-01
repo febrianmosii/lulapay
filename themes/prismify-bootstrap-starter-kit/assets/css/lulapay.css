@@ -338,4 +338,13 @@ body {
   .txt-title {
     font-size: 18px;
   }
+
+  .centered-screen {
+    width: 100%;
+  }
+
+  .checkout img {
+    width: 150px;
+  }
+
 }
