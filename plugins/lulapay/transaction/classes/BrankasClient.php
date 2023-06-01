@@ -55,7 +55,7 @@ class BrankasClient
                 'display_name'       => 'Lulapay',
                 'logo_url'           => 'https://lulapay.my.id/themes/prismify-bootstrap-starter-kit/assets/images/logo.png',
                 'return_url'         => 'https://lulapay.my.id/transaction/success',
-                'fail_url'           => 'https://lulapay.my.id/transaction/failed?',
+                'fail_url'           => 'https://lulapay.my.id/transaction/failed',
                 'deep_link'          => true,
                 'short_redirect_uri' => false,
                 'language'           => 'UNKNOWN_LANGUAGE'
