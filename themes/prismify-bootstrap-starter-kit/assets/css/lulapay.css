@@ -313,8 +313,12 @@ body {
   background:#709cc3;
 }
 
-.txt-provider.Brankas {
+.txt-provider.Stripe {
   background: #a570c3;
+}
+
+.txt-provider.Brankas {
+  background: #727272;
 }
 
 /* set responsive */

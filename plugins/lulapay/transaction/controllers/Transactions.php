@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Lulapay\Transaction\Models\Customer;
 use Lulapay\Transaction\Models\Transaction;
-use System\Classes\PluginManager;
+use Stripe\Exception\SignatureVerificationException;
+use Stripe\Webhook;
+
 
 class Transactions extends Controller
 {
@@ -237,6 +239,44 @@ class Transactions extends Controller
                     $transaction->setStatus($transactionStatus, 'brankas');
                 }
             }
+        }
+    }
+
+    public function notifStripe(Request $request)
+    {
+        $payload = $request->getContent();
+        $headerStripeSignature = $request->header('Stripe-Signature');
+        $headerTimestamp = $request->header('Stripe-Timestamp');
+        $endpointSecret = 'whsec_OxpL11srn6tbaPwSd0BoToc56SsokOsv';
+
+        try {
+            $event = Webhook::constructEvent(
+                $payload,
+                $headerStripeSignature,
+                $headerTimestamp,
+                $endpointSecret
+            );
+
+            // Retrieve the payment object from the event
+            $paymentObject = $event->data->object;
+            $paymentId = $paymentObject->id;
+            $paymentStatus = $paymentObject->status;
+
+            // Check the payment status and take appropriate actions
+            if ($paymentStatus === 'succeeded') {
+                // Payment completed successfully
+                // Perform necessary actions (e.g., update database, fulfill order)
+            } elseif ($paymentStatus === 'failed') {
+                // Payment failed
+                // Handle the situation accordingly
+            } elseif ($paymentStatus === 'expired') {
+                // Payment expired
+                // Handle the situation accordingly
+            }
+
+            return response('Webhook handled successfully');
+        } catch (SignatureVerificationException $e) {
+            return response('Webhook signature verification failed', 400);
         }
     }
 }

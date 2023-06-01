@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInit788e8bc5953e2daa502780a424db83a7
 {
     public static $prefixLengthsPsr4 = array (
+        'S' => 
+        array (
+            'Stripe\\' => 7,
+        ),
         'M' => 
         array (
             'Midtrans\\' => 9,
@@ -14,6 +18,10 @@ class ComposerStaticInit788e8bc5953e2daa502780a424db83a7
     );
 
     public static $prefixDirsPsr4 = array (
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
+        ),
         'Midtrans\\' => 
         array (
             0 => __DIR__ . '/..' . '/midtrans/midtrans-php/Midtrans',

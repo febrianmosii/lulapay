@@ -1,0 +1,37 @@
+url        = "/stripe"
+layout     = "default"
+title      = "Pay"
+meta_title = "Pay"
+meta_description = "Process your payment - Pay page."
+==
+<button id="paymentButton" data-secret="pi_3NEHIfIfCImqQvCt0fJwtf4y_secret_M1mrrtXZxz8e4rvDEDmAh5mHp">Pay Now</button>
+
+{% put scripts %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+$(document).ready(function() {
+    var stripe = Stripe('pk_test_51NEGwOIfCImqQvCtreSTb46E7pzNu9CjPw2l1edmu2ydek4Q74XO0LcA11KyO50yaz8KW5dfB8RXlH0Tgo8ewlmC00FIHodtKY');
+    var paymentButton = $('#paymentButton');
+
+    paymentButton.click(function() {
+        stripe.confirmCardPayment(paymentButton.attr('data-secret'), {
+            payment_method: {
+                card: {
+                    number: '4242424242424242', // Replace with actual card details
+                    exp_month: 12,
+                    exp_year: 2024,
+                    cvc: '123'
+                }
+            }
+        }).then(function(result) {
+            if (result.error) {
+                console.error(result.error.message);
+            } else {
+                // Handle successful payment
+                console.log(result.paymentIntent);
+            }
+        });
+    });
+});
+</script>
+{% endput %}

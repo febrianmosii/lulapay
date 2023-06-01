@@ -5,6 +5,7 @@ use DB;
 use Flash;
 use Cms\Classes\ComponentBase;
 use Lulapay\PaymentGateway\Models\Account;
+use Lulapay\Transaction\Classes\StripeClient;
 use Lulapay\Transaction\Classes\BrankasClient;
 use Lulapay\Transaction\Classes\MidtransClient;
 use Lulapay\Transaction\Models\Transaction as TransactionModel;
@@ -101,6 +102,8 @@ class Transaction extends ComponentBase
                 $client   = new MidtransClient();
             } else if ($provider === 'brankas') {
                 $client   = new BrankasClient();
+            } else if ($provider === 'stripe') {
+                $client   = new StripeClient();
             }
             
             $response = $client->charge($this->transaction, $this->payment_method);
@@ -111,11 +114,12 @@ class Transaction extends ComponentBase
             $this->page['status']                = $this->transaction->getStatusLabel();
             $this->page['page_state']            = 'midtrans';
 
-            $expiryTime = $response->expiry_time ?? '';
+            $expiryTime      = $response->expiry_time ?? '';
+            $transactionTime = $response->response->transaction_time ?? '';
 
             // Set default expiry time = 24 hours
             if ( ! $expiryTime) {
-                $expiryTime = date('d F Y H:i:s', strtotime($response->transaction_time.' + 1 day'));
+                $expiryTime = date('d F Y H:i:s', strtotime($transactionTime.' + 1 day'));
             }
             
             // If credit card
@@ -125,6 +129,10 @@ class Transaction extends ComponentBase
                 $this->page['redirect_url'] = $response->redirect_uri;
                 $this->page['page_state']   = 'brankas';
                 $this->page['expiry_time']  = date('d F Y H:i:s', strtotime($expiryTime));
+            } else if ( ! empty($response->url)) {
+                $this->page['redirect_url'] = $response->url;
+                $this->page['page_state']   = 'stripe';
+                $this->page['expiry_time']  = date('d F Y H:i:s', strtotime('@'.$response->expires_at));
             } else {
                 $vaNumber = '';
     
@@ -256,6 +264,21 @@ class Transaction extends ComponentBase
                     }
                 } else if ($provider === 'brankas' && $id) {
                     $client = new BrankasClient();
+                    $transactionStatus = $client->checkStatus($id);
+    
+                    if ( ! empty($transactionStatus)) {
+                        $status = $transaction->setStatus($transactionStatus, $provider);
+
+                        $log = [
+                            'type'                  => 'User-RQ',
+                            'transaction_status_id' => $status,
+                            'data'                  => json_encode($transactionStatus)
+                        ];
+                
+                        $transaction->transaction_logs()->create($log);
+                    }
+                } else if ($provider === 'stripe' && $id) {
+                    $client = new StripeClient();
                     $transactionStatus = $client->checkStatus($id);
     
                     if ( ! empty($transactionStatus)) {

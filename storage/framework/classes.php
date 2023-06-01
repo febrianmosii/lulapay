@@ -125,4 +125,5 @@
   'RainLab\\Blog\\Models\\Settings' => 'plugins/rainlab/blog/models/Settings.php',
   'Lulapay\\Transaction\\Classes\\MidtransClient' => 'plugins/lulapay/transaction/classes/MidtransClient.php',
   'Lulapay\\Transaction\\Classes\\BrankasClient' => 'plugins/lulapay/transaction/classes/BrankasClient.php',
+  'Lulapay\\Transaction\\Classes\\StripeClient' => 'plugins/lulapay/transaction/classes/StripeClient.php',
 );

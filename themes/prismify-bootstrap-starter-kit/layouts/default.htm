@@ -17,7 +17,6 @@ description = "Default layout"
     <script type="text/javascript" src="{{ 'assets/js/manifest.js'|theme }}"></script>
     <script type="text/javascript" src="{{ 'assets/js/vendor.js'|theme }}"></script>
     <script type="text/javascript" src="{{ 'assets/js/app.js'|theme }}"></script>
-    
     {% framework extras %}
     
     {% scripts %}
@@ -37,7 +36,7 @@ description = "Default layout"
     </div>
     <!-- Preloader End --> 
 
-    <div class="app-container">
+    <div class="app-container position-relative">
       <main id="app-content" class="app-content" role="main">
         {% partial 'app/content' %}
       </main>

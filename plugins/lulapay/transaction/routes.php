@@ -7,3 +7,4 @@ Route::group(['middleware' => 'Lulapay\Transaction\Classes\AuthMiddleware'], fun
 
 Route::post('api/v1/transaction/notif/midtrans', 'Lulapay\Transaction\Controllers\Transactions@notifMidtrans');
 Route::post('api/v1/transaction/notif/brankas', 'Lulapay\Transaction\Controllers\Transactions@notifBrankas');
+Route::post('api/v1/transaction/notif/stripe', 'Lulapay\Transaction\Controllers\Transactions@notifStripe');

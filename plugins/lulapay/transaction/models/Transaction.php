@@ -88,6 +88,11 @@ class Transaction extends Model
         if ($data) {
             $trx = json_decode($data->data);
 
+            if ( ! isset($trx->transaction_id)) {
+                return isset($trx->id) ? $trx->id : '';
+            }
+
+            # Midtrans & Brankas
             return isset($trx->transaction_id) ? $trx->transaction_id : '';
         }
 
@@ -108,8 +113,29 @@ class Transaction extends Model
             'void'       => 4
         ];
 
+        $mapStatusStripe = [
+            'pending'                 => 1,
+            'processing'              => 1,
+            'incomplete'              => 1,
+            'requires_payment_method' => 1,
+            'requires_confirmation'   => 1,
+            'requires_action'         => 1,
+            'paid'                    => 2,
+            'succeeded'               => 2,
+            'expired'                 => 3,
+            'canceled'                => 4,
+            'failed'                  => 4
+        ];
+
         if ($provider == 'midtrans') {
             $status = $mapStatusMidtrans[$status] ?? '';
+
+            if ($status && $status !== $this->transaction_status_id) {
+                $this->transaction_status_id = $status;
+                $this->save();
+            }
+        } else if ($provider == 'stripe') {
+            $status = $mapStatusStripe[$status] ?? '';
 
             if ($status && $status !== $this->transaction_status_id) {
                 $this->transaction_status_id = $status;

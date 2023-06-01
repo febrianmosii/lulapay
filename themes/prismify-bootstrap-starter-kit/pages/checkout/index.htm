@@ -8,14 +8,28 @@ custom_body_class = "centered-screen no-bg no-footer"
 [transaction]
 ==
 <div class="card text-center">
-  {% partial 'app/head-title' backlink=back_link_url title="Konfirmasi Pembayaran" %}
+  {% if payment_method.payment_gateway_provider.code == 'stripe' %}
+    {% partial 'app/head-title' backlink=back_link_url title="Payment Confirmation" %}
+  {% else %}
+    {% partial 'app/head-title' backlink=back_link_url title="Konfirmasi Pembayaran" %}
+  {% endif  %}
   
   <div class="card-body checkout">
     <img src="{{ payment_method.logo.getPath() }}">
     <div class="alert alert-primary mt-4 pd-2" role="alert">
-      Anda akan diarahkan ke halaman pembayaran {{ payment_method.name }} untuk menyelesaikan pembayaran
+      {% if payment_method.payment_gateway_provider.code == 'stripe' %}
+        You will be directed to the  {{ payment_method.name }} payment page to complete the payment
+      {% else %}
+        Anda akan diarahkan ke halaman pembayaran {{ payment_method.name }} untuk menyelesaikan pembayaran
+      {% endif%}
     </div>      
     
-    <a href="{{ 'checkout/payment'|page({methodId: payment_method.id, transactionHash: transaction_hash }) }}" class="btn btn-primary pay-btn">Bayar Tagihan</a>
+    <a href="{{ 'checkout/payment'|page({methodId: payment_method.id, transactionHash: transaction_hash }) }}" class="btn btn-primary pay-btn">
+      {% if payment_method.payment_gateway_provider.code == 'stripe' %}
+        Pay Invoice
+      {% else %}
+        Bayar Tagihan
+      {% endif %}
+    </a>
   </div>
 </div>
