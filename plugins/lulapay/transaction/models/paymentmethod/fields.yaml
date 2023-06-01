@@ -32,8 +32,11 @@ fields:
     sandbox_simulator_url:
         label: Sandbox Simulator URL (if any)
         span: full
-        required: 1
         type: text
+    is_active:
+        label: Is Active?
+        type: checkbox
+        default: true
     logo:
         label: Logo
         type: fileupload

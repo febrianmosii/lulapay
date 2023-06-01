@@ -1,4 +1,9 @@
 columns:
+    created_at:
+        label: 'Tanggal'
+        type: datetime
+        searchable: true
+        sortable: true
     invoice_code:
         label: 'Invoice No.'
         type: text

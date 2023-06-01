@@ -2,6 +2,10 @@
 $(document).ready(function () {
   var itemIndex = 1;
 
+  setTimeout(() => {
+    $('.generate-invoice').trigger('click');
+  }, 300);
+  
   $('#addMore').click(function () {
     var allItemsValid = true;
 

@@ -1,0 +1,17 @@
+url = "/transaction/failed"
+layout = "default"
+title = "Thanks Page"
+description = "Saat ini bank Anda tidak dapat terhubung. silahkan coba kembali beberapa saat lagi."
+meta_title = "Pembayaran Anda Gagal"
+meta_description = "Saat ini bank Anda tidak dapat terhubung. silahkan coba kembali beberapa saat lagi."
+
+[transaction]
+==
+<div class="px-4 py-5 my-5 text-center">
+  <img class="logo d-block mx-auto mb-5" src="{{ 'assets/images/logo.png'|theme }}" alt="" style="width: 200px;">
+  <h3 class="fw-bold text-danger" style="margin-top:6rem!important;"><i class="fa fa-times me-1"></i> Pembayaran Anda Gagal</h3>
+  <div class="col-lg-10 mx-auto">
+    <p class="lead mb-4 text-muted">Maaf saat ini channel pembayaran Anda sedang tidak dapat terhubung. silahkan coba kembali beberapa saat lagi.</p>
+    <a href="{{ pay_url }}" class="btn btn-primary">Kembali ke Halaman Transaksi</a>
+  </div>
+</div>

@@ -89,15 +89,15 @@ meta_description = "Process your payment - cart page."
         {% for method in method_groups %}
           <a href="{{ 'checkout/index'|page({methodId: method.id, transactionHash: transaction_hash }) }}" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="row">
-              <div class="col-md-3" style="align-self: center;">
+              <div class="col-3" style="align-self: center;">
                 <img src="{{ method.logo }}" style="max-width: 100%;" alt="">
               </div>
-              <div class="col-md-9">
+              <div class="col-9">
                 <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">{{ method.name }}</h5>
-                  <small class="text-muted">{{ method.provider }}</small>
+                  <h5 class="mb-1 txt-title">{{ method.name }}</h5>
+                  <small class="text-muted txt-provider {{ method.provider }}">{{ method.provider }}</small>
                 </div>
-                <p class="mb-1">{{ method.description }}</small>
+                <p class="mb-1 txt-desc text-muted">{{ method.description }}</small>
               </div>
             </div>
           </a>

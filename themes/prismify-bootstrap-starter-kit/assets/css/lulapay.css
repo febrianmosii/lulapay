@@ -300,7 +300,42 @@ body {
   display: none !important;
 }
 
-@media (max-width:575)  {
-  
+.txt-provider {
+  padding: 4px 7px;
+  background: red;
+  margin-bottom: 5px;
+  color: #fff !important;
+  margin-top: 5px;
+  font-size: 12px;
+}
 
+.txt-provider.Midtrans {
+  background:#709cc3;
+}
+
+.txt-provider.Brankas {
+  background: #a570c3;
+}
+
+/* set responsive */
+@media only screen and (max-width: 575px) {
+  .list-group-item-action p {
+
+  }
+  .generate-invoice {
+    margin-top: 10px !important;
+  }
+  .generate-invoice i {
+    margin-right: 5px !important;
+  }
+  .txt-desc {
+    font-size: 12px;
+  }
+  .txt-provider {
+    font-size: 10px;
+    height: 24px;
+  }
+  .txt-title {
+    font-size: 18px;
+  }
 }

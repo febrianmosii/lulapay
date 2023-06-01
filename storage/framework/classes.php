@@ -123,4 +123,6 @@
   'RainLab\\Blog\\Components\\Posts' => 'plugins/rainlab/blog/components/Posts.php',
   'RainLab\\Blog\\Components\\Categories' => 'plugins/rainlab/blog/components/Categories.php',
   'RainLab\\Blog\\Models\\Settings' => 'plugins/rainlab/blog/models/Settings.php',
+  'Lulapay\\Transaction\\Classes\\MidtransClient' => 'plugins/lulapay/transaction/classes/MidtransClient.php',
+  'Lulapay\\Transaction\\Classes\\BrankasClient' => 'plugins/lulapay/transaction/classes/BrankasClient.php',
 );

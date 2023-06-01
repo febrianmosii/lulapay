@@ -1,0 +1,17 @@
+url = "/transaction/success"
+layout = "default"
+title = "Thanks Page"
+description = "Transaksi Anda berhasil dibayar, terima kasih telah melakukan pembayaran."
+meta_title = "Pembayaran Anda Berhasil"
+meta_description = "Transaksi Anda berhasil dibayar, terima kasih telah melakukan pembayaran."
+
+[transaction]
+==
+<div class="px-4 py-5 my-5 text-center">
+  <img class="logo d-block mx-auto mb-5" src="{{ 'assets/images/logo.png'|theme }}" alt="" style="width: 200px;">
+  <h3 class="fw-bold text-success" style="margin-top:6rem!important;"><i class="fa fa-check me-1"></i> Pembayaran Anda Berhasil</h3>
+  <div class="col-lg-10 mx-auto">
+    <p class="lead mb-4 text-muted">Transaksi Anda berhasil dibayar, terima kasih telah melakukan pembayaran</p>
+    <a href="{{ pay_url }}" class="btn btn-primary">Kembali ke Halaman Transaksi</a>
+  </div>
+</div>

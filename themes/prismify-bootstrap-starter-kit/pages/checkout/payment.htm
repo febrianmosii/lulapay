@@ -6,12 +6,16 @@ meta_description = "Process your payment - Pay page."
 
 [transaction]
 ==
-{% if payment_method.payment_method_type.code == 'bank-transfer' %}
-  {% partial 'app/payment-page/va' %}
-{% elseif payment_method.payment_method_type.code == 'over-the-counter' %}
-  {% partial 'app/payment-page/on-retail' %}
-{% elseif payment_method.payment_method_type.code == 'e-wallet' %}
-  {% partial 'app/payment-page/e-wallet' %}
-{% elseif payment_method.payment_method_type.code == 'card-payment' %}
-  {% partial 'app/payment-page/card-payment' %}
+{% if page_state == 'midtrans' %}
+  {% if payment_method.payment_method_type.code == 'bank-transfer' %}
+    {% partial 'app/payment-page/va' %}
+  {% elseif payment_method.payment_method_type.code == 'over-the-counter' %}
+    {% partial 'app/payment-page/on-retail' %}
+  {% elseif payment_method.payment_method_type.code == 'e-wallet' %}
+    {% partial 'app/payment-page/e-wallet' %}
+  {% elseif payment_method.payment_method_type.code == 'card-payment' %}
+    {% partial 'app/payment-page/card-payment' %}
+  {% endif %}
+{% else %}
+  {% partial 'app/payment-page/brankas' %}
 {% endif %}

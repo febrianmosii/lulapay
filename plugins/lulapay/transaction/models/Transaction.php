@@ -81,7 +81,7 @@ class Transaction extends Model
         
     }
 
-    public function getMidtransTrxId()
+    public function getTrxId()
     {
         $data = TransactionLog::whereTransactionId($this->id)->whereType('TRX')->first();
 
@@ -115,6 +115,40 @@ class Transaction extends Model
                 $this->transaction_status_id = $status;
                 $this->save();
             }
+        } else if ($provider == 'brankas') {
+            switch ($status) {
+                case 2: 
+                case 'SUCCESS':
+                    # Paid
+                    $transactionStatusId = 2;
+                    break;
+                case 11: 
+                case 13: 
+                case 'EXPIRED':
+                case 'CANCELLED':
+                    # Expired
+                    $transactionStatusId = 3;
+                    break;
+                case 3: 
+                case 4: 
+                case 14: 
+                case 15: 
+                case 'ERROR':
+                case 'LOGIN_ERROR':
+                case 'DENIED':
+                case 'FAILED':
+                    # Failed
+                    $transactionStatusId = 4;
+                    break;
+                
+                default:
+                    # Pending
+                    $transactionStatusId = 1;
+                    break;
+            }
+
+            $this->transaction_status_id = $transactionStatusId;
+            $this->save();
         }
 
         return $this->transaction_status_id;

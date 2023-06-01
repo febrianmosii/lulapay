@@ -17,3 +17,6 @@ columns:
         label: Payment Gateway Prpvoder
         relation: payment_gateway_provider
         select: name
+    is_active:
+        label: Status Active
+        type: switch
