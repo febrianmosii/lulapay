@@ -218,4 +218,25 @@ class Transactions extends Controller
             ], 500);
         }
     }
+
+    public function notifBrankas() 
+    {
+        $post = \Input::all();
+        
+        if ( ! empty($post['reference_id']) && ! empty($post['transaction_id'])) {
+            $transactionId     = $post['transaction_id'];
+            $transactionHash   = $post['reference_id'];
+            $transactionStatus = $post['status'];
+            
+            $transaction = Transaction::whereHas('transaction_logs',function ($x) use ($transactionId) {
+                return $x->where('type', 'TRX')->where('data', 'LIKE', '%'.$transactionId.'%');
+            })->whereTransactionHash($transactionHash);
+
+            if ($transaction) {
+                if ( ! empty($transactionStatus)) {
+                    $transaction->setStatus($transactionStatus, 'brankas');
+                }
+            }
+        }
+    }
 }
