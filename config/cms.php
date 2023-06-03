@@ -389,7 +389,7 @@ return [
     |
     */
 
-    'enableCsrfProtection' => true,
+    'enableCsrfProtection' => env('ENABLE_CSRF_PROTECTION', true),
 
     /*
     |--------------------------------------------------------------------------

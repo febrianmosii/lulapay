@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -55,11 +56,11 @@ return [
         'mysql' => [
             'driver'     => 'mysql',
             'engine'     => 'InnoDB',
-            'host'       => 'localhost',
-            'port'       => 3306,
-            'database'   => 'lulapp',
-            'username'   => 'lulapay',
-            'password'   => '1qaZXsw2!!lulapay',
+            'host'       => env('DB_HOST'),
+            'port'       => env('DB_PORT'),
+            'database'   => env('DB_NAME'),
+            'username'   => env('DB_USERNAME'),
+            'password'   => env('DB_PASSWORD'),
             'charset'    => 'utf8mb4',
             'collation'  => 'utf8mb4_unicode_ci',
             'prefix'     => '',
