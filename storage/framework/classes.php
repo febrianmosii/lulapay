@@ -244,4 +244,6 @@
   'Backend\\FormWidgets\\FileUpload' => 'modules/backend/formwidgets/FileUpload.php',
   'Cms\\Classes\\Content' => 'modules/cms/classes/Content.php',
   'System\\Helpers\\View' => 'modules/system/helpers/View.php',
+  'System\\Models\\EventLog' => 'modules/system/models/EventLog.php',
+  'System\\Classes\\ErrorHandler' => 'modules/system/classes/ErrorHandler.php',
 );

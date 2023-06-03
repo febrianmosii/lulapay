@@ -260,8 +260,8 @@ class Transactions extends Controller
             $paymentId = $paymentObject->id;
             $paymentStatus = $paymentObject->payment_status;
 
-            if (isset($paymentObject->transaction_hash)) {
-                $transaction = Transaction::whereTransactionHash($paymentObject->transaction_hash)->first();
+            if (isset($paymentObject->metadata->transaction_hash)) {
+                $transaction = Transaction::whereTransactionHash($paymentObject->metadata->transaction_hash)->first();
 
                 if ($transaction) {
                     $transaction->setStatus($paymentStatus, 'stripe');
@@ -278,7 +278,7 @@ class Transactions extends Controller
                 return Response::json([
                     'error'   => false,
                     'message' => "webhook handled successfully",
-                    'transaction_hash' => $paymentObject->transaction_hash,
+                    'transaction_hash' => $paymentObject->metadata->transaction_hash,
                     "status" => $paymentStatus
                 ], 200);
             }

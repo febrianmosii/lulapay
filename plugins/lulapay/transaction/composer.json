@@ -1,4 +1,9 @@
 {
+	"config": {
+        "platform": {
+            "php": "7.4.33"
+         }
+   },
     "require": {
         "midtrans/midtrans-php": "^2.5",
         "stripe/stripe-php": "^10.14"
