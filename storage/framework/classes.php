@@ -246,4 +246,9 @@
   'System\\Helpers\\View' => 'modules/system/helpers/View.php',
   'System\\Models\\EventLog' => 'modules/system/models/EventLog.php',
   'System\\Classes\\ErrorHandler' => 'modules/system/classes/ErrorHandler.php',
+  'lulapay\\dashboard\\Plugin' => 'plugins/lulapay/dashboard/Plugin.php',
+  'lulapay\\dashboard\\Controllers\\dashboards' => 'plugins/lulapay/dashboard/controllers/dashboards.php',
+  'lulapay\\transaction\\Controllers\\gilas' => 'plugins/lulapay/transaction/controllers/gilas.php',
+  'lulapay\\transaction\\Controllers\\dashboards' => 'plugins/lulapay/transaction/controllers/dashboards.php',
+  'lulapay\\transaction\\Controllers\\dashboard' => 'plugins/lulapay/transaction/controllers/dashboard.php',
 );

@@ -14,6 +14,17 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function boot()
+    {
+        // listen for the display event of the Dashboard controller
+        \Event::listen('backend.page.beforeDisplay', function($controller, $action){
+            // redirect from dashboard to somewhere else
+            if ($action == 'index' && $controller instanceof \Backend\Controllers\Index){
+                return Backend::redirect('lulapay/transaction/dashboard');
+            }
+        });
+    }
+
     public function registerComponents()
     {
         return [
@@ -34,9 +45,18 @@ class Plugin extends PluginBase
         $navigation = $navigationManager->listMainMenuItems();
         $navigationManager->removeMainMenuItem('October.Cms', 'cms');
         
-        unset($navigation['OCTOBER.CMS.CMS']);
+        unset(
+            $navigation['OCTOBER.CMS.CMS']
+        );
 
         return [
+            'dashboard' => [
+                'label'       => 'Dashboard',
+                'url'         => Backend::url('lulapay/transaction/dashboard'),
+                'icon'        => 'icon-bar-chart',
+                'permissions' => ['lulapay.transaction.*'],
+                'order'       => 1
+            ],
             'transaction' => [
                 'label'       => 'Transactions',
                 'url'         => Backend::url('lulapay/transaction/transactions'),

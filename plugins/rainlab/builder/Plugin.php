@@ -52,7 +52,6 @@ class Plugin extends PluginBase
                 'permissions' => ['rainlab.builder.manage_plugins'],
                 'order'       => 400,
                 'useDropdown' => false,
-
                 'sideMenu' => [
                     'database' => [
                         'label'       => 'rainlab.builder::lang.database.menu_label',

@@ -257,7 +257,6 @@ class Transactions extends Controller
 
             // Retrieve the payment object from the event
             $paymentObject = $event->data->object;
-            $paymentId = $paymentObject->id;
             $paymentStatus = $paymentObject->payment_status;
 
             if (isset($paymentObject->metadata->transaction_hash)) {
