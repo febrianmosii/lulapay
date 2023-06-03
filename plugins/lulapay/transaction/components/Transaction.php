@@ -68,16 +68,24 @@ class Transaction extends ComponentBase
                 if ($transaction->transaction_status_id == 1) {
                     return Redirect::to($backUrl);
                 }
+                
+                if ($currentPage == 'Pembayaran Anda Berhasil' && $transaction->transaction_status_id != 2) {
+                    return Redirect::to(url('/transaction/failed').'?transaction-hash='.$transaction->transaction_hash);
+                } else if ($currentPage == 'Pembayaran Anda Gagal' && ! in_array($transaction->transaction_status_id, [3,4])) {
+                    return Redirect::to(url('/transaction/success').'?transaction-hash='.$transaction->transaction_hash);
+                }                
+            }
+        } else if (! empty($_GET['transaction-hash'])) {
+            $currentPage = $this->controller->getPage()->meta_title;
+            $transaction = TransactionModel::whereTransactionHash($_GET['transaction-hash'])->first();
+            
+            if ($transaction) {
+                $backUrl = $this->pageUrl('checkout/payment', ['transactionHash' => $transaction->transaction_hash, 'methodId' => $transaction->payment_method_id]);
 
-                if ($provider === 'brankas') {
-                    $id = $transaction->getTrxId();
-
-                    $client = new BrankasClient();
-                    $transactionStatus = $client->checkStatus($id);
-    
-                    if ( ! empty($transactionStatus)) {
-                        $transaction->setStatus($transactionStatus, $provider);
-                    }
+                $this->page['pay_url'] = $backUrl;
+                
+                if ($transaction->transaction_status_id == 1) {
+                    return Redirect::to($backUrl);
                 }
 
                 if ($currentPage == 'Pembayaran Anda Berhasil' && $transaction->transaction_status_id != 2) {
@@ -85,6 +93,7 @@ class Transaction extends ComponentBase
                 } else if ($currentPage == 'Pembayaran Anda Gagal' && ! in_array($transaction->transaction_status_id, [3,4])) {
                     return Redirect::to(url('/transaction/success').'?transaction-hash='.$transaction->transaction_hash);
                 }                
+
             }
         } else {
             return Redirect::to('/404');
