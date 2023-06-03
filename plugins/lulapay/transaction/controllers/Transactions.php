@@ -268,7 +268,7 @@ class Transactions extends Controller
                     
                     $log = [
                         'type'                  => 'Notif-RS',
-                        'transaction_status_id' => $status,
+                        'transaction_status_id' => $paymentStatus,
                         'data'                  => json_encode($paymentObject)
                     ];
             
