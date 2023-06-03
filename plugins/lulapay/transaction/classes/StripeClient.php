@@ -51,8 +51,11 @@ class StripeClient
             ],
             'line_items'  => $items,
             'mode'        => 'payment',
-            'success_url' => 'https://lulapay.my.id/transaction/success',
-            'cancel_url'  => 'https://lulapay.my.id/transaction/failed'
+            'metadata' => [
+                'transaction_hash' => $transaction->transaction_hash, 
+            ],
+            'success_url' => 'https://lulapay.my.id/transaction/success?transaction-hash='.$transaction->transaction_hash,
+            'cancel_url'  => 'https://lulapay.my.id/transaction/failed?transaction-hash='.$transaction->transaction_hash
         ];
 
         if ($payment_method->code == 'wechat_pay') {

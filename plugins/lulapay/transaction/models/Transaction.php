@@ -121,6 +121,7 @@ class Transaction extends Model
             'requires_confirmation'   => 1,
             'requires_action'         => 1,
             'paid'                    => 2,
+            'complete'                => 2,
             'succeeded'               => 2,
             'expired'                 => 3,
             'canceled'                => 4,

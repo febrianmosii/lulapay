@@ -245,38 +245,59 @@ class Transactions extends Controller
     public function notifStripe(Request $request)
     {
         $payload = $request->getContent();
-        $headerStripeSignature = $request->header('Stripe-Signature');
-        $headerTimestamp = $request->header('Stripe-Timestamp');
+        $headerStripeSignature = $request->header('stripe-signature');
         $endpointSecret = 'whsec_OxpL11srn6tbaPwSd0BoToc56SsokOsv';
 
         try {
             $event = Webhook::constructEvent(
                 $payload,
                 $headerStripeSignature,
-                $headerTimestamp,
                 $endpointSecret
             );
 
             // Retrieve the payment object from the event
             $paymentObject = $event->data->object;
             $paymentId = $paymentObject->id;
-            $paymentStatus = $paymentObject->status;
+            $paymentStatus = $paymentObject->payment_status;
 
-            // Check the payment status and take appropriate actions
-            if ($paymentStatus === 'succeeded') {
-                // Payment completed successfully
-                // Perform necessary actions (e.g., update database, fulfill order)
-            } elseif ($paymentStatus === 'failed') {
-                // Payment failed
-                // Handle the situation accordingly
-            } elseif ($paymentStatus === 'expired') {
-                // Payment expired
-                // Handle the situation accordingly
+            if (isset($paymentObject->transaction_hash)) {
+                $transaction = Transaction::whereTransactionHash($paymentObject->transaction_hash)->first();
+
+                if ($transaction) {
+                    $transaction->setStatus($paymentStatus, 'stripe');
+                    
+                    $log = [
+                        'type'                  => 'Notif-RS',
+                        'transaction_status_id' => $status,
+                        'data'                  => json_encode($paymentObject)
+                    ];
+            
+                    $transaction->transaction_logs()->create($log);
+                }
+
+                return Response::json([
+                    'error'   => false,
+                    'message' => "webhook handled successfully",
+                    'transaction_hash' => $paymentObject->transaction_hash,
+                    "status" => $paymentStatus
+                ], 200);
             }
 
-            return response('Webhook handled successfully');
+            return Response::json([
+                'error'   => true,
+                'message' => "transaction not found"
+            ], 404);
         } catch (SignatureVerificationException $e) {
-            return response('Webhook signature verification failed', 400);
+            return Response::json([
+                'error'   => true,
+                'message' => $e->getMessage(),
+                'get' => $_GET,
+                'post' => $_POST,
+                'request' => $request->all(),
+                'headers' => $headers = collect($request->header())->transform(function ($item) {
+                    return $item[0];
+                })
+            ], 400);
         }
     }
 }
