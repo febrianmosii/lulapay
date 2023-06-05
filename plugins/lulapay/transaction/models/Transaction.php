@@ -22,7 +22,6 @@ class Transaction extends Model
         'payment_method_id',
         'total',
         'expired_time',
-        'total_charged',
         'transaction_hash',
         'transaction_status_id',
         'items'

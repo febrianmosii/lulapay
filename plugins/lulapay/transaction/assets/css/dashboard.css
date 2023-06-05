@@ -57,3 +57,12 @@
     right: 3rem;
     font-size: 25px;
 }
+@media (min-width: 768px) {
+    .apex-chart-container {
+        width: 500px;
+        align-self: center;
+    }
+}
+.charts {
+    max-width: 100%;
+}

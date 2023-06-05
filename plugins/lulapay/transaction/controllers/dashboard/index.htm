@@ -11,14 +11,13 @@
             <div class="card-body pos-r">
                 <div class="row">
                     <div class="col mt-0">
-                        <h3 class="card-title">Sales</h3>
-                        <i class="icon icon-camera-retro"></i> 
+                        <h3 class="card-title">Paid Transactions</h3>
+                        <i class="icon icon-usd"></i> 
                     </div>
                 </div>
-                <h1 class="mt-1 mb-3">2.382</h1>
+                <h1 class="mt-1 mb-3">Rp. <?= $all_time_transaction ?></h1>
                 <div class="mb-0">
-                    <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                    <span class="text-muted">Since last week</span>
+                    <span class="text-muted">All Time</span>
                 </div>
             </div>
         </div>
@@ -28,14 +27,13 @@
             <div class="card-body pos-r">
                 <div class="row">
                     <div class="col mt-0 pd-2">
-                        <h3 class="card-title">Sales</h3>
-                        <i class="icon icon-camera-retro"></i> 
+                        <h3 class="card-title">YTD Paid Transactions</h3>
+                        <i class="icon icon-usd"></i> 
                     </div>
                 </div>
-                <h1 class="mt-1 mb-3">2.382</h1>
+                <h1 class="mt-1 mb-3"><?= $ytd_transaction ?></h1>
                 <div class="mb-0">
-                    <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                    <span class="text-muted">Since last week</span>
+                    <span class="text-muted">January <?= date('Y') ?> - <?= date('F Y') ?></span>
                 </div>
             </div>
         </div>
@@ -45,14 +43,13 @@
             <div class="card-body pos-r">
                 <div class="row">
                     <div class="col mt-0">
-                        <h3 class="card-title">Sales</h3>
-                        <i class="icon icon-camera-retro"></i> 
+                        <h3 class="card-title">Total Merchants</h3>
+                        <i class="icon icon-building-o"></i> 
                     </div>
                 </div>
-                <h1 class="mt-1 mb-3">2.382</h1>
+                <h1 class="mt-1 mb-3"><?= $total_merchant; ?></h1>
                 <div class="mb-0">
-                    <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                    <span class="text-muted">Since last week</span>
+                    <span class="text-muted">Connected</span>
                 </div>
             </div>
         </div>
@@ -62,14 +59,13 @@
             <div class="card-body pos-r">
                 <div class="row">
                     <div class="col mt-0">
-                        <h3 class="card-title">Sales</h3>
-                        <i class="icon icon-camera-retro"></i> 
+                        <h3 class="card-title">Total Customers</h3>
+                        <i class="icon icon-users"></i> 
                     </div>
                 </div>
-                <h1 class="mt-1 mb-3">2.382</h1>
+                <h1 class="mt-1 mb-3"><?= $total_customer; ?></h1>
                 <div class="mb-0">
-                    <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                    <span class="text-muted">Since last week</span>
+                    <span class="text-muted">Connected</span>
                 </div>
             </div>
         </div>
@@ -77,23 +73,15 @@
 </div>  
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <h3>Merchant Transactions</h3>
         <div class="card chart">
-            <div class="card-body pos-r">
-                <div
-                    class="control-chart centered wrap-legend"
-                    data-control="chart-pie"
-                    data-size="200"
-                    data-center-text="100">
-                    <ul>
-                        <li>Label 1 <span>100</span></li>
-                        <li>Label 2 <span>100</span></li>
-                        <li>Label 3 <span>100</span></li>
-                    </ul>
-                </div>
+            <div class="card-body pos-r apex-chart-container">
+                <div id="donut-merchant-trx" data-chart-type="donut" data-labels="<?= $merchant_transactions['labels'] ?? '' ?>" data-series="<?= $merchant_transactions['series'] ?? ''?>" class="charts apex-chart"></div>
             </div>
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <h3>Last 10 Days Transactions</h3>
         <div class="card chart">
             <div class="card-body pos-r">
                 <div
@@ -107,6 +95,48 @@
                         data-set-data="[1477857082000, 400], [1477943482000, 380], [1478029882000, 340], [1478116282000, 540], [1478202682000, 440], [1478289082000, 360], [1478375482000, 220]"
                         data-set-name="Visits">
                     </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <h3>Top 5 Payment Methods</h3>
+        <div class="card chart">
+            <div class="card-body pos-r">
+                <div
+                    class="control-chart wrap-legend"
+                    data-control="chart-bar"
+                    data-height="240"
+                    data-full-width="1">
+                    <ul>
+                        <li>Label 1 <span>100</span></li>
+                        <li>Label 2 <span>200</span></li>
+                        <li>Label 3 <span>300</span></li>
+                        <li>Label 4 <span>300</span></li>
+                        <li>Label 5 <span>300</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <h3>Top 5 Merchants</h3>
+        <div class="card chart">
+            <div class="card-body pos-r">
+                <div
+                    class="control-chart wrap-legend"
+                    data-control="chart-bar"
+                    data-height="240"
+                    data-full-width="1">
+                    <ul>
+                        <li>Label 1 <span>100</span></li>
+                        <li>Label 2 <span>200</span></li>
+                        <li>Label 3 <span>300</span></li>
+                        <li>Label 4 <span>300</span></li>
+                        <li>Label 5  <span>300</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
