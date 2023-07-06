@@ -122,6 +122,60 @@ class Transactions extends Controller
         }
     }
 
+    public function status(Request $request)
+    {
+        // Retrieve the request data
+        $this->transactionData = Input::all();
+
+        // Validate the request data
+        $rules = [
+            'invoice_code' => 'required|string|max:255',
+        ];
+
+        $validator = Validator::make($this->transactionData, $rules);
+
+        if ($validator->fails()) {
+            return Response::json([
+                'error'   => true,
+                'message' => 'Validation error',
+                'errors'  => $validator->errors(),
+            ], 400);
+        }
+        
+        try {
+            DB::beginTransaction();
+            $transaction = Transaction::with(['transaction_status'])
+            ->select('id', 'invoice_code', 'transaction_hash', 'transaction_status_id')
+            ->whereInvoiceCode($this->transactionData['invoice_code'])->first();
+            
+            DB::commit();
+
+            $data = [];
+
+            if ($transaction) {
+                $data = [
+                    'transaction_id'     => $transaction->transaction_hash,
+                    'invoice_code'       => $transaction->invoice_code,
+                    'transaction_status' => $transaction->transaction_status->name
+                ];
+            }
+
+            return Response::json([
+                'error'   => $transaction ? false : true,
+                'message' => $transaction ? 'Transaction found' : 'Transaction not found',
+                'data'    => $data
+            ], $transaction ? 200 : 404);
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollback();
+
+            return Response::json([
+                'error'   => true,
+                'message' => 'Error occurred - Please contact the administrator for details',
+            ], 500);
+        }
+    }
+
     private function getCustomerId() 
     {
         $customer = Customer::whereEmail($this->transactionData['email'])->first();
