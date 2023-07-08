@@ -309,7 +309,10 @@ class Transaction extends ComponentBase
             }
         }
         
-        $this->page['status'] = $transaction->getStatusLabel();
+        $this->page['transaction_status_id'] = $transaction->transaction_status_id;
+        $this->page['payment_method']        = $transaction->payment_method;
+        $this->page['status']                = $transaction->getStatusLabel();
+        $this->page['sandbox']               = env('ENV_PRODUCTION') === false;
 
         Flash::success("Status telah diperbarui");
     }
