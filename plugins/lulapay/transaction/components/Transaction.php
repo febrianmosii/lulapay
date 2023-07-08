@@ -184,7 +184,7 @@ class Transaction extends ComponentBase
         }
         
         $paymentMethods  = [];
-        $merchantMethods = $this->transaction->merchant->payment_methods()->get();
+        $merchantMethods = $this->transaction->merchant->payment_methods;
 
         foreach ($merchantMethods as $method) {
             $groupName = $method->payment_method_type->name;
@@ -241,7 +241,10 @@ class Transaction extends ComponentBase
     {
         $transactionHash = $this->param('transactionHash');
 
-        return TransactionModel::whereTransactionHash($transactionHash)->first();
+
+        return TransactionModel::with(['merchant', 'merchant.payment_methods'=> function($q){
+            $q->whereIsActive(TRUE);
+        }])->whereTransactionHash($transactionHash)->first();
     }
 
     public function onCheckStatus()
