@@ -2,20 +2,10 @@
 #  Field Definitions
 # ===================================
 
-fields:
-    is_superuser:
-        context: [create, update]
-        tab: backend::lang.user.permissions
-        label: backend::lang.user.superuser
-        type: switch
-        comment: backend::lang.user.superuser_comment
-
 tabs:
     defaultTab: backend::lang.user.account
     icons:
         backend::lang.user.account: icon-user
-        backend::lang.user.groups: icon-users
-        backend::lang.user.permissions: icon-key
 
     fields:
         login:
@@ -58,12 +48,6 @@ tabs:
             commentAbove: backend::lang.user.role_comment
             type: radio
 
-        groups:
-            context: [create, update]
-            label: backend::lang.user.groups
-            commentAbove: backend::lang.user.groups_comment
-            type: checkboxlist
-            tab: backend::lang.user.groups
 
 secondaryTabs:
     fields:

@@ -210,7 +210,7 @@ class Users extends Controller
         /*
          * Add permissions tab
          */
-        $form->addTabFields($this->generatePermissionsField());
+        // $form->addTabFields($this->generatePermissionsField());
 
         /*
          * Mark default groups
