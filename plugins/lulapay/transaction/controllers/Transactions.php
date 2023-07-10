@@ -293,7 +293,14 @@ class Transactions extends Controller
                     $transaction->setStatus($transactionStatus, 'brankas');
                 }
             }
+
         }
+
+        return Response::json([
+            'error'   => false,
+            'message' => "Success",
+            "data"    => $post
+        ], 200);
     }
 
     public function notifStripe(Request $request)
