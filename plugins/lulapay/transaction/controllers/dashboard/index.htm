@@ -92,7 +92,14 @@
                     <span
                         data-chart="dataset"
                         data-set-color="#008dc9"
-                        data-set-data="[1477857082000, 400], [1477943482000, 380], [1478029882000, 340], [1478116282000, 540], [1478202682000, 440], [1478289082000, 360], [1478375482000, 220]"
+                        <?php if ($latest_10_days_summaries) { ?>
+                        data-set-data="
+                            <?php foreach ($latest_10_days_summaries as $key => $transaction) { ?> <?= $key != 0 ? ',' : '' ?>[<?= $transaction['timestamp'] ?>, <?= $transaction['value'] ?>]<?php }  ?>
+                        "
+                        <?php } else { ?>
+                            data-set-data="[]"
+                        <?php } ?>
+
                         data-set-name="Visits">
                     </span>
                 </div>
@@ -111,11 +118,9 @@
                     data-height="240"
                     data-full-width="1">
                     <ul>
-                        <li>BCA <span>100</span></li>
-                        <li>Alipay<span>200</span></li>
-                        <li>Kartu Kredit<span>200</span></li>
-                        <li>BCA <span>300</span></li>
-                        <li>BRI <span>300</span></li>
+                        <?php foreach ($top_5_payment_methods as $transaction) { ?> 
+                            <li><?= $transaction->name ?> <span><?= $transaction->count ?></span></li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
@@ -131,11 +136,9 @@
                     data-height="240"
                     data-full-width="1">
                     <ul>
-                        <li>Bogor <span>100</span></li>
-                        <li>Jaksel <span>200</span></li>
-                        <li>Palu <span>300</span></li>
-                        <li>Jakut <span>300</span></li>
-                        <li>Bekasi <span>300</span></li>
+                        <?php foreach ($top_5_payment_merchants as $transaction) { ?> 
+                            <li><?= $transaction->name ?> <span><?= $transaction->count ?></span></li>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
@@ -147,97 +150,29 @@
     <table class="table data" data-control="rowlink">
         <thead>
             <tr>
-                <th class="list-checkbox">
-                    <div class="checkbox custom-checkbox nolabel">
-                        <input type="checkbox" id="checkboxAll" />
-                        <label for="checkboxAll" class="storm-icon-pseudo"></label>
-                    </div>
-                </th>
-                <th class="active sort-asc"><a href="/">Tanggal</a></th>
-                <th class="sort-desc"><a href="/">Invoice No</a></th>
-                <th class="sort-desc"><a href="/">Merchant</a></th>
+                <th><span>Tanggal</span></th>
+                <th><span>Invoice No</span></th>
+                <th><span>Merchant</span></th>
                 <th><span>Customer</span></th>
                 <th><span>Payment Method</span></th>
+                <th><span>Status</span></th>
                 <th><span>Total</span></th>
                 <th class="list-setup"><a href="/" title="List options"></a></th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="list-checkbox nolink">
-                    <div class="checkbox custom-checkbox nolabel">
-                        <input id="checkbox_1" type="checkbox" />
-                        <label for="checkbox_1" class="storm-icon-pseudo">Check</label>
-                    </div>
-                </td>
-                <td>Oct 01, 2013</td>
-                <td><a href="/">INV-J20230526000069</a></td>
-                <td>Bogor</td>
-                <td>Adam Person</td>
-                <td>BCA</td>
-                <td>Rp. 100.000</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr class="active">
-                <td class="list-checkbox nolink">
-                    <div class="checkbox custom-checkbox nolabel">
-                        <input id="checkbox_2" type="checkbox" checked="checked" />
-                        <label for="checkbox_2" class="storm-icon-pseudo">Check The marketplace is open!</label>
-                    </div>
-                </td>
-                <td>Oct 15, 2013</td>
-                <td><a href="/">INV-J20230526000069</a></td>
-                <td>Bogor</td>
-                <td>Sam Georges</td>
-                <td>BCA</td>
-                <td>Rp. 100.000</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="list-checkbox nolink">
-                    <div class="checkbox custom-checkbox nolabel">
-                        <input id="checkbox_3" type="checkbox" />
-                        <label for="checkbox_3" class="storm-icon-pseudo">Check Welcome to the Builder!</label>
-                    </div>
-                </td>
-                <td>Oct 21, 2013</td>
-                <td><a href="/">INV-J20230526000069</a></td>
-                <td>Bogor</td>
-                <td>Alexey Bobkov</td>
-                <td>BCA</td>
-                <td>Rp. 100.000</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="list-checkbox nolink">
-                    <div class="checkbox custom-checkbox nolabel">
-                        <input id="checkbox_4" type="checkbox" />
-                        <label for="checkbox_4" class="storm-icon-pseudo">Check Components explained</label>
-                    </div>
-                </td>
-                <td>Nov 12, 2013</td>
-                <td><a href="/">INV-J20230526000069</a></td>
-                <td>Bogor</td>
-                <td>Alexey Bobkov</td>
-                <td>BCA</td>
-                <td>Rp. 100.000</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="list-checkbox nolink">
-                    <div class="checkbox custom-checkbox nolabel">
-                        <input id="checkbox_5" type="checkbox" />
-                        <label for="checkbox_5" class="storm-icon-pseudo">Check Creating a module in 90 seconds</label>
-                    </div>
-                </td>
-                <td>Nov 15, 2013</td>
-                <td><a href="/">INV-J20230526000069</a></td>
-                <td>Bogor</td>
-                <td>Sam Georges</td>
-                <td>BCA</td>
-                <td>Rp. 100.000</td>
-                <td>&nbsp;</td>
-            </tr>
+            <?php foreach ($latest_10_days_transactions as $transaction) { ?> 
+                <tr>
+                    <td><?= date('d F Y H:i A', strtotime($transaction->created_at)) ?></td>
+                    <td><a href="<?= Backend::url('lulapay/transaction/transactions/preview/'.$transaction->id) ?>"><?= $transaction->invoice_code ?></a></td>
+                    <td><?= $transaction->merchant->name ?></td>
+                    <td><?= $transaction->customer->name ?></td>
+                    <td><?= $transaction->payment_method->name ?></td>
+                    <td><?= $transaction->transaction_status->name ?></td>
+                    <td class="text-right">Rp. <?= number_format($transaction->total) ?></td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
         </body>
     </table>
     <div class="list-footer">

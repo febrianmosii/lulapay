@@ -46,11 +46,65 @@ class Dashboard extends Controller
         // Displaying transactions by merchant
         $merchantTransactions = $paidTransaction->with('merchant')->select(DB::raw('sum(total) as total'), 'merchant_id')->groupBy('merchant_id')->get();
 
-        $this->vars['all_time_transaction']  = number_format($paidTransactionAllTime);
-        $this->vars['ytd_transaction']       = number_format($paidTransactionYTD);
-        $this->vars['total_merchant']        = number_format($totalMerchant);
-        $this->vars['total_customer']        = number_format($totalCustomer);
-        $this->vars['merchant_transactions'] = $this->getDataChart($merchantTransactions, 'merchant.name');
+        $this->vars['all_time_transaction']        = number_format($paidTransactionAllTime);
+        $this->vars['ytd_transaction']             = number_format($paidTransactionYTD);
+        $this->vars['total_merchant']              = number_format($totalMerchant);
+        $this->vars['total_customer']              = number_format($totalCustomer);
+        $this->vars['top_5_payment_methods']       = $this->top5PaymentMethods();
+        $this->vars['top_5_payment_merchants']     = $this->top5Merchants();
+        $this->vars['latest_10_days_summaries']    = $this->getLatest10Transactions();
+        $this->vars['latest_10_days_transactions'] = $this->getLatest10Transactions(false);
+        $this->vars['merchant_transactions']       = $this->getDataChart($merchantTransactions, 'merchant.name');
+    }
+
+    private function getLatest10Transactions($count = true) 
+    {
+        $data = [];
+        
+        if ($count) {
+            $transactions = Transaction::whereTransactionStatusId(2)
+            ->select(DB::raw('created_at as date, count(*) as count'))
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->latest()
+            ->limit(10)
+            ->get();
+
+            foreach ($transactions as $transaction) {
+                $data[] = [
+                    'timestamp' => strtotime($transaction->date) * 1000,
+                    'value'     => $transaction->count
+                ];
+            } 
+        } else {
+            $data = Transaction::whereTransactionStatusId(2)->latest()->limit(10)->get();
+        }
+        
+
+        return $data;
+    }
+
+    private function top5PaymentMethods() 
+    {
+        return DB::table("lulapay_transaction_transactions AS a")
+        ->join("lulapay_transaction_payment_methods AS b", "b.id",  "=", "a.payment_method_id")
+        ->select(DB::raw('b.name, count(*) as count'))
+        ->groupBy("a.payment_method_id")
+        ->whereTransactionStatusId(2)
+        ->orderBy("count", "DESC")
+        ->limit(5)
+        ->get();
+    }
+
+    private function top5Merchants() 
+    {
+        return DB::table("lulapay_transaction_transactions AS a")
+        ->join("lulapay_merchant_merchants AS b", "b.id",  "=", "a.merchant_id")
+        ->select(DB::raw('b.name, count(*) as count'))
+        ->groupBy("a.merchant_id")
+        ->whereTransactionStatusId(2)
+        ->orderBy("count", "DESC")
+        ->limit(5)
+        ->get();
     }
 
     private function getDataChart($data, $labelName)
