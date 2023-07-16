@@ -163,9 +163,6 @@ class Transaction extends ComponentBase
                 $this->page['va_number']      = $vaNumber;
                 $this->page['back_link_url']  = $this->pageUrl('cart/index', ['transactionHash' => $this->transaction->transaction_hash]);
             }
-
-            // Send pending email
-            $this->transaction->sendEmailToCustomer();
                         
             DB::commit();
         } catch (\Exception $e) {
