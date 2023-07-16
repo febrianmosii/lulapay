@@ -77,6 +77,8 @@ class Plugin extends PluginBase
 
     public function registerPermissions()
     {
+        return [];
+        
         return [
             'rainlab.users.access_users' => [
                 'tab'   => 'rainlab.user::lang.plugin.tab',

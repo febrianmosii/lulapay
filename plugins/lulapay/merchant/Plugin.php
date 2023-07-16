@@ -27,7 +27,8 @@ class Plugin extends PluginBase
                 'label'       => 'Merchants',
                 'url'         => Backend::url('lulapay/merchant/merchants'),
                 'icon'        => 'oc-icon-building-o',
-                'permissions' => ['lulapay.merchant.*'],
+                'permissions' => ['lulapay.access_merchants'],
+                'order'       => 2,
                 'sideMenu' => [
                     'merchants' => [
                         'label' => 'Merchants',

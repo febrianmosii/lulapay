@@ -13,8 +13,9 @@ scopes:
         modelClass: Lulapay\Merchant\Models\Merchant
         conditions: merchant_id in (:filtered)
         nameFrom: name
+        options: getMerchantsOptions
     transaction_status_id:
-        label: Merchant
+        label: Status
         modelClass: Lulapay\Transaction\Models\Status
         conditions: transaction_status_id in (:filtered)
         nameFrom: name

@@ -251,4 +251,13 @@
   'lulapay\\transaction\\Controllers\\gilas' => 'plugins/lulapay/transaction/controllers/gilas.php',
   'lulapay\\transaction\\Controllers\\dashboards' => 'plugins/lulapay/transaction/controllers/dashboards.php',
   'lulapay\\transaction\\Controllers\\dashboard' => 'plugins/lulapay/transaction/controllers/dashboard.php',
+  'lulapay\\admin\\Plugin' => 'plugins/lulapay/admin/Plugin.php',
+  'lulapay\\admin\\Controllers\\admins' => 'plugins/lulapay/admin/controllers/admins.php',
+  'lulapay\\admin\\Controllers\\roles' => 'plugins/lulapay/admin/controllers/roles.php',
+  'Lulapay\\Transaction\\Models\\TransactionExport' => 'plugins/lulapay/transaction/models/TransactionExport.php',
+  'system\\Controllers\\mailtemplates' => 'modules/system/controllers/mailtemplates.php',
+  'Lulapay\\Transaction\\Console\\SetExpiredTransaction' => 'plugins/lulapay/transaction/console/SetExpiredTransaction.php',
+  'system\\Controllers\\maillayouts' => 'modules/system/controllers/maillayouts.php',
+  'system\\Controllers\\mailpartials' => 'modules/system/controllers/mailpartials.php',
+  'Lulapay\\Transaction\\Models\\MailTemplate' => 'plugins/lulapay/transaction/models/MailTemplate.php',
 );

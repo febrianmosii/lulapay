@@ -1,0 +1,17 @@
+<div class="">
+  <div id=":18t" class="ii gt" jslog="20277; u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc3MDg1ODc3NTAxNzE2MDAxOSIsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyIjbXNnLWY6MTc3MDg1ODc3NTAxNzE2MDAxOSIsbnVsbCxbXV0.">
+    <div id=":18u" class="a3s aiL msg5129023478366075843"><u></u>
+      <div style="word-spacing:normal;background-color:#eef4f8">
+        <div style="background-color:#eef4f8;width:95%;margin:0px auto">
+          {% partial 'lulapay.transaction::header' transaction=transaction %}{% endpartial %}
+
+          {% partial 'lulapay.transaction::info' transaction=transaction %}{% endpartial %}
+          
+          {{ content }}
+          
+          {% partial 'lulapay.transaction::footer' transaction=transaction %}{% endpartial %}
+        </div> 
+      </div>
+    </div>
+  </div>
+</div>

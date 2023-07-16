@@ -4,6 +4,7 @@ use Backend\Classes\Controller;
 use Cms\Classes\Controller as CMS_Controller;
 use BackendMenu;
 use Lulapay\PaymentGateway\Models\Account;
+use BackendAuth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -17,10 +18,15 @@ use Stripe\Webhook;
 
 class Transactions extends Controller
 {
-    public $implement = ['Backend\Behaviors\ListController', 'Backend\Behaviors\FormController'];
+    public $implement = [
+        'Backend\Behaviors\ListController', 
+        'Backend\Behaviors\FormController', 
+        'Backend\Behaviors\ImportExportController'
+    ];
     
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';
+    public $importExportConfig = 'config_import_export.yaml';
 
     private $transactionData = [];
 
@@ -31,9 +37,14 @@ class Transactions extends Controller
         BackendMenu::setContext('Lulapay.Transaction', 'transaction', 'transactions');
     }
 
-    public function writeTrxLog() 
+    public function listExtendQuery($query)
     {
+        $user = BackendAuth::getUser();
+        $userRole = $user->role->code;
 
+        if ($userRole === 'merchant') {
+            $query->whereIn("merchant_id", $user->merchants->pluck('id'));
+        }
     }
 
     public function create(Request $request)

@@ -2,6 +2,7 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use BackendAuth;
 
 /**
  * Merchants Back-end Controller
@@ -31,5 +32,15 @@ class Merchants extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Lulapay.Merchant', 'merchant', 'merchants');
+    }
+
+    public function listExtendQuery($query)
+    {
+        $user = BackendAuth::getUser();
+        $userRole = $user->role->code;
+
+        if ($userRole === 'merchant') {
+            $query->whereIn("id", $user->merchants->pluck('id'));
+        }
     }
 }

@@ -29,4 +29,8 @@ class Customer extends Model
      */
     public $rules = [
     ];
+
+    public $hasMany = [
+        'transactions' => ['Lulapay\Transaction\Models\Transaction']
+    ];
 }

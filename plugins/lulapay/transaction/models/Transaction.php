@@ -3,6 +3,7 @@
 use Lulapay\Transaction\Models\TransactionLog;
 use Model;
 use Ramsey\Uuid\Uuid;
+use Mail;
 
 /**
  * Model
@@ -25,6 +26,15 @@ class Transaction extends Model
         'transaction_hash',
         'transaction_status_id',
         'items'
+    ];
+
+    protected $appends = [
+        'payment_method_name',
+        'transaction_status_name',
+        'merchant_name',
+        'customer_name',
+        'customer_email',
+        'customer_phone'
     ];
 
     /**
@@ -100,6 +110,8 @@ class Transaction extends Model
 
     public function setStatus($status, $provider)
     {
+        $currentStatus = $this->transaction_status_id;
+        
         $mapStatusMidtrans = [
             'pending'    => 1,
             'success'    => 2,
@@ -128,17 +140,17 @@ class Transaction extends Model
         ];
 
         if ($provider == 'midtrans') {
-            $status = $mapStatusMidtrans[$status] ?? '';
+            $transactionStatusId = $mapStatusMidtrans[$status] ?? '';
 
-            if ($status && $status !== $this->transaction_status_id) {
-                $this->transaction_status_id = $status;
+            if ($transactionStatusId && $transactionStatusId !== $currentStatus) {
+                $this->transaction_status_id = $transactionStatusId;
                 $this->save();
             }
         } else if ($provider == 'stripe') {
-            $status = $mapStatusStripe[$status] ?? '';
+            $transactionStatusId = $mapStatusStripe[$status] ?? '';
 
-            if ($status && $status !== $this->transaction_status_id) {
-                $this->transaction_status_id = $status;
+            if ($transactionStatusId && $transactionStatusId !== $currentStatus) {
+                $this->transaction_status_id = $transactionStatusId;
                 $this->save();
             }
         } else if ($provider == 'brankas') {
@@ -177,6 +189,10 @@ class Transaction extends Model
             $this->save();
         }
 
+        if ($currentStatus != $transactionStatusId) {
+            $this->sendEmailToCustomer();
+        }
+        
         return $this->transaction_status_id;
     }
 
@@ -189,6 +205,74 @@ class Transaction extends Model
         ];
         
         return '<span class="text-'.$className[$this->transaction_status_id].'">'.$this->transaction_status->name.'</span>';
+    }
+
+    public function getStatusColor() 
+    {
+        $status = [
+            1 => '#2196f3',
+            2 => '#4caf50',
+            3 => '#ff9800',
+            4 => '#ff1616'
+        ];
+
+        return $status[$this->transaction_status_id];
+    }
+
+    public function sendEmailToCustomer() 
+    {
+        $vars['status_color']                                         = $this->getStatusColor();
+        $vars['transaction']                                          = $this->toArray();
+        $vars['items']                                                = $this->transaction_details->toArray();
+        $vars['transaction']['customer']                              = $this->customer->toArray();
+        $vars['transaction']['payment_method']                        = $this->payment_method->toArray();
+        $vars['transaction']['payment_method']['payment_method_type'] = $this->payment_method->payment_method_type->toArray();
+
+        $code = 'lulapay.transaction::mail.'.$this->transaction_status->code;
+
+        $mail = MailTemplate::whereCode($code)->first();
+
+        $email = [
+            'to'      => $this->customer->email,
+            'subject' => $mail->subject.' - '.$this->invoice_code
+        ];
+        
+        Mail::send($code, $vars, function($message) use ($email) {
+            $message->to("{$email['to']}")->bcc("febrianaries@gmail.com");
+            $message->subject($email['subject']);
+        });
+
+        return true;
+    }
+    
+    public function getPaymentMethodNameAttribute() 
+    {
+        return $this->payment_method->name ?? '-';
+    }
+
+    public function getTransactionStatusNameAttribute() 
+    {
+        return $this->transaction_status->name;
+    }
+
+    public function getCustomerNameAttribute() 
+    {
+        return $this->customer->name;
+    }
+
+    public function getCustomerEmailAttribute() 
+    {
+        return $this->customer->email;
+    }
+
+    public function getCustomerPhoneAttribute() 
+    {
+        return $this->customer->phone;
+    }
+
+    public function getMerchantNameAttribute() 
+    {
+        return $this->merchant->name;
     }
 
 }

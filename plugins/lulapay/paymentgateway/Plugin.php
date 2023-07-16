@@ -21,6 +21,7 @@ class Plugin extends PluginBase
                 'url'         => Backend::url('lulapay/paymentgateway/providers'),
                 'icon'        => 'icon-connectdevelop',
                 'permissions' => ['lulapay.paymentgateway.*'],
+                'order'       => 3,
                 'sideMenu' => [
                     'providers' => [
                         'label' => 'Providers',

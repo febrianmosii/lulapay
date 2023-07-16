@@ -12,3 +12,5 @@ toolbar:
 recordUrl: lulapay/transaction/transactions/preview/:id
 # Filter
 filter: config_filter.yaml
+export:
+    useList: false

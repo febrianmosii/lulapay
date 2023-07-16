@@ -1,0 +1,6 @@
+plugin:
+    name: 'lulapay.admin::lang.plugin.name'
+    description: 'lulapay.admin::lang.plugin.description'
+    author: Lulapay
+    icon: oc-icon-users
+    homepage: ''

@@ -4,6 +4,7 @@ use Mail;
 use Event;
 use Backend;
 use BackendAuth;
+use Lulapay\Merchant\Models\Merchant;
 use October\Rain\Auth\Models\User as UserBase;
 
 /**
@@ -46,7 +47,9 @@ class User extends UserBase
      * Relations
      */
     public $belongsToMany = [
-        'groups' => [UserGroup::class, 'table' => 'backend_users_groups']
+        'groups' => [UserGroup::class, 'table' => 'backend_users_groups'],
+        'merchants' => [Merchant::class, 'table' => 'users_merchants']
+
     ];
 
     public $belongsTo = [
@@ -208,5 +211,18 @@ class User extends UserBase
     public function unsuspend()
     {
         BackendAuth::findThrottleByUserId($this->id)->unsuspend();
+    }
+
+    public function getMerchantsOptions()
+    {
+        $result = [];
+
+        foreach (Merchant::all() as $merchant) {
+            $optionLabel = $merchant->name;
+
+            $result[$merchant->id] = $optionLabel;
+        }
+
+        return $result;
     }
 }

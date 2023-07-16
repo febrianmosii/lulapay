@@ -109,6 +109,8 @@ class Plugin extends PluginBase
 
     public function registerPermissions()
     {
+        return [];
+        
         return [
             'rainlab.forum::lang.settings.channels' => [
                 'tab'   => 'rainlab.forum::lang.settings.channels',

@@ -14,6 +14,11 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function register()
+    {
+        $this->registerConsoleCommand('transaction:set_expired_transaction', \Lulapay\Transaction\Console\SetExpiredTransaction::class);
+    }
+
     public function boot()
     {
         // listen for the display event of the Dashboard controller
@@ -23,6 +28,49 @@ class Plugin extends PluginBase
                 return Backend::redirect('lulapay/transaction/dashboard');
             }
         });
+    }
+
+    public function registerSchedule($schedule)
+    {
+        // Set expired transaction
+        $schedule->call(function () {
+
+        })->everyMinute();
+    }
+
+
+    public function registerPermissions()
+    {
+        return [
+            'lulapay.access_dashboard' => [
+                'tab'   => 'Menu',
+                'label' => 'Access Dashboard'
+            ],
+            'lulapay.access_merchants' => [
+                'tab'   => 'Menu',
+                'label' => 'Manage Merchants'
+            ],
+            'lulapay.access_payment_gateways' => [
+                'tab'   => 'Menu',
+                'label' => 'Manage Payment Gateways'
+            ],
+            'lulapay.access_transactions' => [
+                'tab'   => 'Menu',
+                'label' => 'Manage Transactions > Transactions'
+            ],
+            'lulapay.access_transaction_payment_methods' => [
+                'tab'   => 'Menu',
+                'label' => 'Manage Transactions > Payment Methods'
+            ],
+            'lulapay.access_transaction_payment_method_types' => [
+                'tab'   => 'Menu',
+                'label' => 'Manage Transactions > Payment Method Types'
+            ],
+            'lulapay.access_menu' => [
+                'tab'   => 'Menu',
+                'label' => 'Manage Admins'
+            ],
+        ];
     }
 
     public function registerComponents()
@@ -46,7 +94,8 @@ class Plugin extends PluginBase
         $navigationManager->removeMainMenuItem('October.Cms', 'cms');
         
         unset(
-            $navigation['OCTOBER.CMS.CMS']
+            $navigation['OCTOBER.CMS.CMS'],
+            $navigation['OCTOBER.SYSTEM.SYSTEM']
         );
 
         return [
@@ -54,32 +103,33 @@ class Plugin extends PluginBase
                 'label'       => 'Dashboard',
                 'url'         => Backend::url('lulapay/transaction/dashboard'),
                 'icon'        => 'icon-bar-chart',
-                'permissions' => ['lulapay.transaction.*'],
+                'permissions' => ['lulapay.access_dashboard'],
                 'order'       => 1
             ],
             'transaction' => [
                 'label'       => 'Transactions',
                 'url'         => Backend::url('lulapay/transaction/transactions'),
                 'icon'        => 'icon-money',
-                'permissions' => ['lulapay.transaction.*'],
+                'permissions' => ['lulapay.*'],
+                'order'       => 4,
                 'sideMenu' => [
                     'transactions' => [
                         'label' => 'Transactions',
                         'icon'  => 'icon-money',
                         'url'   => Backend::url('lulapay/transaction/transactions'),
-                        // 'permissions' => ['lulapay.transaction.access_transaction']
+                        'permissions' => ['lulapay.access_transaction']
                     ],
                     'paymentmethods' => [
                         'label' => 'Payment Method',
                         'icon'  => 'icon-credit-card',
                         'url'   => Backend::url('lulapay/transaction/paymentmethods'),
-                        // 'permissions' => ['lulapay.transaction.access_transaction']
+                        'permissions' => ['lulapay.access_payment_methods']
                     ],
                     'paymentmethodtypes' => [
                         'label' => 'Payment Method Types',
                         'icon'  => 'icon-cog',
                         'url'   => Backend::url('lulapay/transaction/paymentmethodtypes'),
-                        // 'permissions' => ['lulapay.transaction.access_transaction']
+                        'permissions' => ['lulapay.access_payment_method_types']
                     ],
                 ]
             ]

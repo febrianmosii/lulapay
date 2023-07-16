@@ -34,6 +34,8 @@ class Plugin extends PluginBase
 
     public function registerPermissions()
     {
+        return [];
+        
         return [
             'rainlab.builder.manage_plugins' => [
                 'tab' => 'rainlab.builder::lang.plugin.name',
@@ -43,6 +45,8 @@ class Plugin extends PluginBase
 
     public function registerNavigation()
     {
+        return [];
+
         return [
             'builder' => [
                 'label'       => 'rainlab.builder::lang.plugin.name',

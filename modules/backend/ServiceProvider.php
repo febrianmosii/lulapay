@@ -130,6 +130,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerBackendPermissions()
     {
+        return [];
+        
         BackendAuth::registerCallback(function ($manager) {
             $manager->registerPermissions('October.Backend', [
                 'backend.access_dashboard' => [

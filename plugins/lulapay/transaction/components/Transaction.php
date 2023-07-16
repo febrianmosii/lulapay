@@ -3,6 +3,7 @@
 use Redirect;
 use DB;
 use Flash;
+use Mail;
 use Cms\Classes\ComponentBase;
 use Lulapay\PaymentGateway\Models\Account;
 use Lulapay\Transaction\Classes\StripeClient;
@@ -163,6 +164,9 @@ class Transaction extends ComponentBase
                 $this->page['back_link_url']  = $this->pageUrl('cart/index', ['transactionHash' => $this->transaction->transaction_hash]);
             }
 
+            // Send pending email
+            $this->transaction->sendEmailToCustomer();
+                        
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

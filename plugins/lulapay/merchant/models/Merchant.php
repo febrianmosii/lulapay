@@ -1,5 +1,6 @@
 <?php namespace Lulapay\Merchant\Models;
 
+use BackendAuth;
 use Lulapay\Transaction\Models\PaymentMethod;
 use Ramsey\Uuid\Uuid;
 use Model;
@@ -70,6 +71,30 @@ class Merchant extends Model
             }
 
             $result[$groupName][$method->id] = $optionLabel;
+        }
+
+        return $result;
+    }
+
+    public function getMerchantsOptions()
+    {
+        $result = [];
+
+        $query = Merchant::select("id", "name");
+
+        $user = BackendAuth::getUser();
+        $userRole = $user->role->code;
+
+        if ($userRole === 'merchant') {
+            $query->whereIn("id", $user->merchants->pluck('id'));
+        }
+
+        $merchants = $query->get();
+
+        foreach ($merchants as $merchant) {
+            $optionLabel = $merchant->name;
+
+            $result[$merchant->id] = $optionLabel;
         }
 
         return $result;

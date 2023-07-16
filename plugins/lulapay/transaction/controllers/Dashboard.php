@@ -6,19 +6,25 @@ use Backend\Classes\Controller;
 use Lulapay\Merchant\Models\Merchant;
 use Lulapay\Transaction\Models\Customer;
 use Lulapay\Transaction\Models\Transaction;
+use BackendAuth;
 
 /**
  * Dashboard Back-end Controller
  */
 class Dashboard extends Controller
 {
-    
+    private $userRole;
+
     public function __construct()
     {
         parent::__construct();
 
+        $user = BackendAuth::getUser();
+
         // Set the page title
         $this->pageTitle = 'Custom Page';
+        $this->user      = $user;
+        $this->userRole  = $user->role->code;
 
         BackendMenu::setContext('Lulapay.Transaction', 'dashboard');
     }
@@ -31,8 +37,22 @@ class Dashboard extends Controller
         $this->addJs('/plugins/lulapay/transaction/assets/js/dashboard.js');
 
         // Display your custom HTML content here
-
         $paidTransaction = Transaction::whereTransactionStatusId(2);
+
+        // Add customer filter for merchant user
+        if ($this->userRole === 'merchant') {
+            $merchants = $this->user->merchants->pluck('id');
+            
+            $paidTransaction->whereIn("merchant_id", $merchants);
+
+            $totalMerchant = Merchant::whereIn("id", $merchants)->count();
+            $totalCustomer = Customer::whereHas('transactions', function($q) use ($merchants) {
+                $q->whereIn("merchant_id", $merchants);
+            })->count();            
+        } else {
+            $totalMerchant = Merchant::count();
+            $totalCustomer = Customer::count();
+        }
 
         $firstDayOfYear = date('Y-01-01 00:00:00'); // Get the first day of the year
         $currentDate    = date('Y-m-d H:i:s'); // Get the current date
@@ -40,8 +60,6 @@ class Dashboard extends Controller
         // Displaying box charts
         $paidTransactionAllTime = $paidTransaction->sum('total');
         $paidTransactionYTD     = $paidTransaction->whereBetween('created_at', [$firstDayOfYear, $currentDate])->sum('total');
-        $totalMerchant          = Merchant::count();
-        $totalCustomer          = Customer::count();
 
         // Displaying transactions by merchant
         $merchantTransactions = $paidTransaction->with('merchant')->select(DB::raw('sum(total) as total'), 'merchant_id')->groupBy('merchant_id')->get();
@@ -62,12 +80,17 @@ class Dashboard extends Controller
         $data = [];
         
         if ($count) {
-            $transactions = Transaction::whereTransactionStatusId(2)
+            $query = Transaction::whereTransactionStatusId(2)
             ->select(DB::raw('created_at as date, count(*) as count'))
             ->groupBy(DB::raw('DATE(created_at)'))
             ->latest()
-            ->limit(10)
-            ->get();
+            ->limit(10);
+
+            if ($this->userRole === 'merchant') {
+                $query->whereIn("merchant_id", $this->user->merchants->pluck('id'));
+            }
+
+            $transactions = $query->get();
 
             foreach ($transactions as $transaction) {
                 $data[] = [
@@ -76,7 +99,13 @@ class Dashboard extends Controller
                 ];
             } 
         } else {
-            $data = Transaction::whereTransactionStatusId(2)->latest()->limit(10)->get();
+            $query = Transaction::whereTransactionStatusId(2)->latest()->limit(10);
+
+            if ($this->userRole === 'merchant') {
+                $query->whereIn("merchant_id", $this->user->merchants->pluck('id'));
+            }
+
+            $data = $query->get();
         }
         
 
@@ -85,26 +114,36 @@ class Dashboard extends Controller
 
     private function top5PaymentMethods() 
     {
-        return DB::table("lulapay_transaction_transactions AS a")
+        $query = DB::table("lulapay_transaction_transactions AS a")
         ->join("lulapay_transaction_payment_methods AS b", "b.id",  "=", "a.payment_method_id")
         ->select(DB::raw('b.name, count(*) as count'))
         ->groupBy("a.payment_method_id")
         ->whereTransactionStatusId(2)
         ->orderBy("count", "DESC")
-        ->limit(5)
-        ->get();
+        ->limit(5);
+
+        if ($this->userRole === 'merchant') {
+            $query->whereIn("a.merchant_id", $this->user->merchants->pluck('id'));
+        }
+        
+        return $query->get();
     }
 
     private function top5Merchants() 
     {
-        return DB::table("lulapay_transaction_transactions AS a")
+        $query = DB::table("lulapay_transaction_transactions AS a")
         ->join("lulapay_merchant_merchants AS b", "b.id",  "=", "a.merchant_id")
         ->select(DB::raw('b.name, count(*) as count'))
         ->groupBy("a.merchant_id")
         ->whereTransactionStatusId(2)
         ->orderBy("count", "DESC")
-        ->limit(5)
-        ->get();
+        ->limit(5);
+        
+        if ($this->userRole === 'merchant') {
+            $query->whereIn("a.merchant_id", $this->user->merchants->pluck('id'));
+        }
+
+        return $query->get();
     }
 
     private function getDataChart($data, $labelName)

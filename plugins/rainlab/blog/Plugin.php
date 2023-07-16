@@ -33,6 +33,8 @@ class Plugin extends PluginBase
 
     public function registerPermissions()
     {
+        return [];
+        
         return [
             'rainlab.blog.manage_settings' => [
                 'tab'   => 'rainlab.blog::lang.blog.tab',

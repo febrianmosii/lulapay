@@ -1,0 +1,12 @@
+# ===================================
+#  Import/Export Behavior Config
+# ===================================
+
+export:
+    title: Export subscribers
+    modelClass: Lulapay\Transaction\Models\TransactionExport
+    list: $/lulapay/transaction/models/transaction/columns.yaml
+    redirect: lulapay/transaction/transactions
+    fileName: Laporan Transaksi.csv
+
+

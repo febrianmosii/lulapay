@@ -362,6 +362,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendNavigation()
     {
         BackendMenu::registerCallback(function ($manager) {
+            return;
             $manager->registerMenuItems('October.System', [
                 'system' => [
                     'label'       => 'system::lang.settings.menu_label',
@@ -414,6 +415,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerBackendPermissions()
     {
+        return [];
+        
         BackendAuth::registerCallback(function ($manager) {
             $manager->registerPermissions('October.System', [
                 'system.manage_updates' => [

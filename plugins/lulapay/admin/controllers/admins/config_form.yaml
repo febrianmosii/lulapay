@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Admin
+
+# Model Form Field configuration
+form: $/lulapay/admin/models/admin/fields.yaml
+
+# Model Class name
+modelClass: Backend\Models\User
+
+# Default redirect location
+defaultRedirect: lulapay/admin/admins
+
+# Create page
+create:
+    title: Create Admin
+    redirect: lulapay/admin/admins/update/:id
+    redirectClose: lulapay/admin/admins
+
+# Update page
+update:
+    title: Edit Admin
+    redirect: lulapay/admin/admins
+    redirectClose: lulapay/admin/admins
+
+# Preview page
+preview:
+    title: Preview Admin

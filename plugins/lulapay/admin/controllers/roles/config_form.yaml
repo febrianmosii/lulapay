@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Role
+
+# Model Form Field configuration
+form: $/lulapay/admin/models/role/fields.yaml
+
+# Model Class name
+modelClass: Backend\Models\UserRole
+
+# Default redirect location
+defaultRedirect: lulapay/admin/roles
+
+# Create page
+create:
+    title: Create Role
+    redirect: lulapay/admin/roles/update/:id
+    redirectClose: lulapay/admin/roles
+
+# Update page
+update:
+    title: Edit Role
+    redirect: lulapay/admin/roles
+    redirectClose: lulapay/admin/roles
+
+# Preview page
+preview:
+    title: Preview Role
