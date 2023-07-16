@@ -41,7 +41,9 @@ class SetExpiredTransaction extends Command
                 ])
             ];
     
+            $transaction->save();
             $transaction->transaction_logs()->create($log);
+            $transaction->sendEmailToCustomer();
 
             $bar->advance();
         }
