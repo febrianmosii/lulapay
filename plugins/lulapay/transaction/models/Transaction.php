@@ -228,6 +228,10 @@ class Transaction extends Model
         $vars['transaction']['payment_method']                        = $this->payment_method->toArray();
         $vars['transaction']['payment_method']['payment_method_type'] = $this->payment_method->payment_method_type->toArray();
 
+        if ($this->transaction_status_id == 1) {
+            $vars['url'] = url('transaction/'.$this->transaction_hash.'/pay/'.$this->payment_method_id);
+        }
+
         $code = 'lulapay.transaction::mail.'.$this->transaction_status->code;
 
         $mail = MailTemplate::whereCode($code)->first();
@@ -242,7 +246,84 @@ class Transaction extends Model
             $message->subject($email['subject']);
         });
 
+        $this->sendNotificationToMerchant();
+
         return true;
+    }
+
+    public function sendNotificationToMerchant()
+    {
+
+        $url = $this->merchant->notif_callback_url.'?key='.$this->merchant->public_key;
+
+        $payload = [
+            'transaction_status' => $this->transaction_status->code,
+            'invoice_code'       => $this->invoice_code
+        ];
+
+        try {
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL            => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING       => '',
+                CURLOPT_MAXREDIRS      => 10,
+                CURLOPT_TIMEOUT        => 3,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST  => 'POST',
+                CURLOPT_POSTFIELDS     => json_encode($payload),
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'Accept: application/json'
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            if ($response) {
+                $dataLog = [
+                    'message'  => $payload,
+                    'response' => json_decode($response)
+                ];
+
+                $log = [
+                    'type'                  => 'Notif-To-MRC',
+                    'transaction_status_id' => $this->transaction_status_id,
+                    'data'                  => json_encode($dataLog)
+                ];
+        
+                $this->transaction_logs()->create($log);
+            } else {
+                $dataLog = [
+                    'message'  => $payload,
+                    'response' => 'No response from host'
+                ];
+
+                $log = [
+                    'type'                  => 'Notif-To-MRC',
+                    'transaction_status_id' => $this->transaction_status_id,
+                    'data'                  => json_encode($dataLog)
+                ];
+            }
+        } catch (\Throwable $th) {
+            $dataLog = [
+                'message'  => $payload ?? [],
+                'response'  => ! empty($response) ? json_decode($response) : [],
+                'exception' => 'Exception from host: '.$th->getMessage()
+            ];
+
+            $log = [
+                'type'                  => 'Notif-To-MRC',
+                'transaction_status_id' => $this->transaction_status_id,
+                'data'                  => json_encode($dataLog)
+            ];
+        }
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
     }
     
     public function getPaymentMethodNameAttribute() 

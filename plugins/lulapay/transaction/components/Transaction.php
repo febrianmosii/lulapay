@@ -164,13 +164,13 @@ class Transaction extends ComponentBase
                 $this->page['back_link_url']  = $this->pageUrl('cart/index', ['transactionHash' => $this->transaction->transaction_hash]);
             }
                         
+            $this->transaction->sendEmailToCustomer();
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
-            Flash::error($e->getMessage());
             
-            return Redirect::back();;
+            Flash::error($e->getMessage());
         }
     }
 

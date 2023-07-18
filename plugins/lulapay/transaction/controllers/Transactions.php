@@ -225,6 +225,50 @@ class Transactions extends Controller
         return $transaction ? $transaction->transaction_hash : '';
     }
 
+    public function notifLulapay() 
+    {
+        $post = \Input::all();
+
+        // Validate the request data
+        $rules = [
+            'invoice_code'       => 'required|string',
+            'transaction_status' => 'required|string',
+            'key'                => 'required|string'
+        ];
+
+        $validator = Validator::make($post, $rules);
+
+        if ($validator->fails()) {
+            return Response::json([
+                'error'   => true,
+                'message' => 'Validation error',
+                'errors'  => $validator->errors(),
+            ], 400);
+        }
+        
+        $transaction = Transaction::whereInvoiceCode($post['invoice_code'])->first();
+        
+        if ( ! $transaction) {
+            return Response::json([
+                'error'   => true,
+                'message' => 'Transaction not found'
+            ], 404);
+        }
+
+        if ($transaction->merchant->public_key !== $post['key']) {
+            return Response::json([
+                'error'   => true,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+        
+        return Response::json([
+            'error'   => false,
+            'message' => 'Success retrieving status',
+            'data'    => $post
+        ], 200);
+    }
+
     public function notifMidtrans() 
     {
         // Get midtrans provider account from database
@@ -240,14 +284,14 @@ class Transactions extends Controller
 
         try {
             $notif = new \Midtrans\Notification();
-
+            
             if ($notif ) {
                 $notif = $notif->getResponse();
     
                 $invoiceCode = explode('|', $notif->order_id)[0];
         
                 $transaction = Transaction::whereInvoiceCode($invoiceCode)->first();
-        
+
                 if ($transaction) {
                     $status = $transaction->setStatus($notif->transaction_status, 'midtrans');
         
