@@ -225,8 +225,8 @@ class Transaction extends Model
         $vars['transaction']                                          = $this->toArray();
         $vars['items']                                                = $this->transaction_details->toArray();
         $vars['transaction']['customer']                              = $this->customer->toArray();
-        $vars['transaction']['payment_method']                        = $this->payment_method->toArray();
-        $vars['transaction']['payment_method']['payment_method_type'] = $this->payment_method->payment_method_type->toArray();
+        $vars['transaction']['payment_method']                        = $this->payment_method->toArray() ?? [];
+        $vars['transaction']['payment_method']['payment_method_type'] = $this->payment_method->payment_method_type->toArray() ?? [];
 
         if ($this->transaction_status_id == 1) {
             $vars['url'] = url('transaction/'.$this->transaction_hash.'/pay/'.$this->payment_method_id);
