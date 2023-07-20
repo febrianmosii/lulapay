@@ -28,5 +28,6 @@ class Account extends Model
      */
     public $rules = [
         'name' => 'required|between:4,50|unique:lulapay_paymentgateway_accounts',
+        'api_host' => 'required|string:6,255|regex:/^(https?:\/\/[\w\-\.]+(:[0-9]+)?(\/[\w\-\.]*)*\/?)$/'
     ];
 }
