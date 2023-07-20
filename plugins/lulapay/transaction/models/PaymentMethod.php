@@ -23,8 +23,8 @@ class PaymentMethod extends Model
      * @var array Validation rules
      */
     public $rules = [
-        'name' => 'required|between:4,12|unique:lulapay_paymentgateway_providers',
-        'code' => 'required|between:4,12|unique:lulapay_paymentgateway_providers',
+        'name' => 'required|between:4,12|unique:lulapay_transaction_payment_methods',
+        'code' => 'required|between:4,12|unique:lulapay_transaction_payment_methods',
         'sandbox_simulator_url' => 'nullable|string:6,255|regex:/^(https?:\/\/\w+(\.\w+)*(:[0-9]+)?\/?)$/'
     ];
     

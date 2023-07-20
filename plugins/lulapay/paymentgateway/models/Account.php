@@ -27,5 +27,6 @@ class Account extends Model
      * @var array Validation rules
      */
     public $rules = [
+        'name' => 'required|between:4,50|unique:lulapay_paymentgateway_accounts',
     ];
 }
