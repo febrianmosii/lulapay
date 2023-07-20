@@ -25,12 +25,12 @@ class Plugin extends PluginBase
                         'url'   => Backend::url('lulapay/admin/admins'),
                         'permissions' => ['lulapay.admin.access_admins']
                     ],
-                    'roles' => [
-                        'label' => 'Roles',
-                        'icon'  => 'icon-cog',
-                        'url'   => Backend::url('lulapay/admin/roles'),
-                        'permissions' => ['lulapay.admin.access_admin_roles']
-                    ],
+                    // 'roles' => [
+                    //     'label' => 'Roles',
+                    //     'icon'  => 'icon-cog',
+                    //     'url'   => Backend::url('lulapay/admin/roles'),
+                    //     'permissions' => ['lulapay.admin.access_admin_roles']
+                    // ],
                 ]
             ]
         ];
