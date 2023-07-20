@@ -23,8 +23,11 @@ class PaymentMethod extends Model
      * @var array Validation rules
      */
     public $rules = [
+        'name' => 'required|between:4,12|unique:lulapay_paymentgateway_providers',
+        'code' => 'required|between:4,12|unique:lulapay_paymentgateway_providers',
+        'sandbox_simulator_url' => 'nullable|string:6,255|regex:/^(https?:\/\/\w+(\.\w+)*(:[0-9]+)?\/?)$/'
     ];
-
+    
     public $belongsTo = [ 
         'payment_method_type' => 'Lulapay\Transaction\Models\PaymentMethodType',
         'payment_gateway_provider' => 'Lulapay\PaymentGateway\Models\Provider',

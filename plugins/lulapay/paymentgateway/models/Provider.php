@@ -13,7 +13,6 @@ class Provider extends Model
 
     protected $dates = ['deleted_at'];
 
-
     /**
      * @var string The database table used by the model.
      */
@@ -22,6 +21,10 @@ class Provider extends Model
     /**
      * @var array Validation rules
      */
+
     public $rules = [
+        'name' => 'required|between:4,12|unique:lulapay_paymentgateway_providers',
+        'code' => 'required|between:4,12|unique:lulapay_paymentgateway_providers',
     ];
+
 }
