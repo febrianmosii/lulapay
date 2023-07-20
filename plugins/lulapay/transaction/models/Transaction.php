@@ -221,12 +221,25 @@ class Transaction extends Model
 
     public function sendEmailToCustomer() 
     {
+        $paymentMethod = [
+            'name' => '',
+        ];
+
+        $paymentMethodType = [
+            'name' => '',
+        ];
+
+        if ($this->payment_method) {
+            $paymentMethod = $this->payment_method->toArray();
+            $paymentMethodType = $this->payment_method->payment_method_type->toArray();
+        }
+        
         $vars['status_color']                                         = $this->getStatusColor();
         $vars['transaction']                                          = $this->toArray();
         $vars['items']                                                = $this->transaction_details->toArray();
         $vars['transaction']['customer']                              = $this->customer->toArray();
-        $vars['transaction']['payment_method']                        = $this->payment_method->toArray() ?? [];
-        $vars['transaction']['payment_method']['payment_method_type'] = $this->payment_method->payment_method_type->toArray() ?? [];
+        $vars['transaction']['payment_method']                        = $paymentMethod;
+        $vars['transaction']['payment_method']['payment_method_type'] = $paymentMethodType;
 
         if ($this->transaction_status_id == 1) {
             $vars['url'] = url('transaction/'.$this->transaction_hash.'/pay/'.$this->payment_method_id);
