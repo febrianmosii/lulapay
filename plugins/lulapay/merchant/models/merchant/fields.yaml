@@ -23,7 +23,7 @@ fields:
     notif_callback_url:
         label: Notification Callback URL
         span: full
-        comment: Notif url callback will be used as webhook post callback to get the transaction status update
+        comment: Prefix must be http:// or https:// . Notif url callback will be used as webhook post callback to get the transaction status update
         required: 1
         type: text
     public_key:

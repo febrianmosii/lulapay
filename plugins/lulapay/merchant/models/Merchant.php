@@ -26,8 +26,11 @@ class Merchant extends Model
      * @var array Validation rules
      */
     public $rules = [
+        'name'               => 'required|between:6,255|unique:lulapay_merchant_merchants',
+        'admin_phone'        => 'required|digits_between:8,13|numeric',
+        'admin_email'        => 'required|between:6,255|email',
+        'notif_callback_url' => 'required|string:6,255|regex:/^(https?:\/\/\w+(\.\w+)*(:[0-9]+)?\/?)$/',
     ];
-
 
     public $attachOne = [
         'logo' => 'System\Models\File'
