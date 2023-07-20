@@ -9,7 +9,7 @@ meta_description = "Simulate your transaction using Lulapay API here."
 <div class="card simulator">
   <div class="card-body checkout">
     <div class="container">
-      <h1>Guest Checkout</h1>
+      <h3>Gasmaj - Checkout Simulator</h3>
       <form id="invoiceForm" data-request="simulator::onSubmit" data-request-success="redirectSuccess" method="POST" data-request-flash>
         <div class="mb-3">
           <label for="invoiceCode" class="form-label">Invoice Code</label>
@@ -21,6 +21,15 @@ meta_description = "Simulate your transaction using Lulapay API here."
               <a class="generate-invoice btn btn-primary"><i class="fa fa-refresh"></i> Generate</a>
             </div>
           </div>
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Merchant (Mushola / Masjid)</label>
+          <select class="form-select mb-2" name="merchant_id" required>
+            <option value="" selected>Select merchant</option>
+            {% for merchant in merchants %}
+              <option value="{{ merchant.id }}">{{ merchant.name }}</option>
+            {% endfor %}
+          </select>
         </div>
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
@@ -36,43 +45,28 @@ meta_description = "Simulate your transaction using Lulapay API here."
         </div>
         <div id="itemsContainer">
           <div class="mb-3 item">
-            <label for="item1" class="form-label">Item 1</label>
-            <select class="form-select item-name mb-2" name="items[0][item_name]" required>
+            <label for="item1" class="form-label">Item</label>
+            <select class="form-select item-name mb-2" name="item_name" required>
               <option value="" selected>Select an item</option>
-              <option value="Tshirt">Tshirt</option>
-              <option value="Hoodie">Hoodie</option>
-              <option value="Shoes">Shoes</option>
-              <option value="Jeans">Jeans</option>
+              <option value="Infaq Yatim Piatu">Infaq Yatim Piatu</option>
+              <option value="Sedekah Rakyat Miskin">Sedekah Rakyat Miskin</option>
+              <option value="Zakat Penghasilan dan Harta">Zakat Penghasilan dan Harta</option>
+              <option value="Zakat Perniagaan">Zakat Perniagaan</option>
+              <option value="Zakat Peternakan">Zakat Peternakan</option>
+              <option value="Zakat Pertanian">Zakat Pertanian</option>
+              <option value="Zakat Pertambangan">Zakat Pertambangan</option>
+              <option value="Zakat Fitrah">Zakat Fitrah</option>
             </select>
-            <select class="form-select item-quantity mb-2" name="items[0][quantity]" required>
-              <option value="1" selected>1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-            </select>
-            <input type="number" class="form-control item-price mb-2" name="items[0][price]" readonly>
-            <button type="button" class="btn btn-danger removeItem">Remove</button>
             <hr>
           </div>
         </div>  
         <div class="mb-3">
-          <div class="row">
-            <div class="col-md-8 col-sm-8 col-xs-8">
-              <label for="totalCharged" class="form-label">Total Charged</label>
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-4 text-end">
-              <span id="total-charged"><strong>0</strong></span>
-            </div>
-          <input type="number" class="form-control hidden" id="totalCharged" name="total_charged" readonly>
+          <label for="nominal" class="form-label">Nominal</label>
+          <input type="text" class="form-control item-price mb-2" name="price" min=0 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required />
         </div>
-        <button type="button" id="addMore" class="btn btn-primary">Add More</button>
-        <button type="submit" class="btn btn-success">Submit</button>
+        <div class="mb-3 text-end">
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
       </form>
     </div>
   </div>

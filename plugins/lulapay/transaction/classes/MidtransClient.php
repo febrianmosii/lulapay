@@ -166,7 +166,9 @@ class MidtransClient
 
         $transaction->payment_method_id = $payment_method->id;
         $transaction->save();
-        
+
+        $transaction->sendEmailToCustomer();
+
         return $response;
     }
 

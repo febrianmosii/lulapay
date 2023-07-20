@@ -1,6 +1,7 @@
 <?php namespace Lulapay\Transaction\Components;
 
 use Validator;
+use Lulapay\Merchant\Models\Merchant;
 use Cms\Classes\ComponentBase;
 
 class Simulator extends ComponentBase
@@ -18,40 +19,52 @@ class Simulator extends ComponentBase
         return [];
     }
 
+    public function onRun()
+    {
+        $this->page['merchants'] = Merchant::select('id', 'name')->get();
+    }
+
     public function onSubmit()
     {
         $post = \Input::post();
 
         // Validate the input data
         $rules = [
-            'invoice_code'      => 'required|string|max:255',
-            'name'              => 'required|string|max:50',
-            'email'             => 'required|email|max:110',
-            'phone'             => 'required|string|max:15',
-            'total_charged'     => 'required|numeric|digits_between:1,10|not_in:0',
-            'items'             => 'required|array',
-            'items.*.price'     => 'required|numeric',
-            'items.*.quantity'  => 'required|numeric|digits_between:1,10',
-            'items.*.item_name' => 'required|string|max:255',        
+            'invoice_code' => 'required|string|max:255',
+            'name'         => 'required|string|min:3|max:50',
+            'email'        => 'required|email|max:110',
+            'phone'        => 'required|string|min:8|max:13',
+            'item_name'    => 'required|string|max:255',
+            'price'        => 'required|numeric|min:10000'
+        ];
+
+        $message = [
+            'price.min' => 'Transaksi minimal adalah Rp 10.000'
         ];
         
-        $validator = Validator::make($post, $rules);
+        $validator = Validator::make($post, $rules, $message);
 
         // If validation fails, display error messages
         if ($validator->fails()) {
             throw new \Exception($validator->errors()->first());
         }
-        
-        $response = $this->createTransactionWithAPI($post);
 
-        if ($response['error']) {
-            throw new \Exception($response['message']);
-        } else {
-            if ($redirectUrl = $response['redirect_url']) {
-                return \Redirect::to($redirectUrl);
+        $errorMessage = "Sedang terjadi gangguan jaringan, coba lagi nanti";
+
+        try {
+            $response = $this->createTransactionWithAPI($post);
+
+            if ($response['error']) {
+                throw new \Exception($response['message']);
             } else {
-                throw new \Exception("Sedang terjadi gangguan jaringan, coba lagi nanti.");
+                if ($redirectUrl = $response['redirect_url']) {
+                    return \Redirect::to($redirectUrl);
+                } else {
+                    throw new \Exception($errorMessage);
+                }
             }
+        } catch (\Throwable $th) {
+            throw new \Exception($errorMessage);
         }
         
         return \Redirect::to($this->page['url']);
@@ -59,8 +72,25 @@ class Simulator extends ComponentBase
 
     public function createTransactionWithAPI($data) 
     {
-        $publicKey = env('SIMULATOR_PUBLIC_KEY');
-        $serverKey = env('SIMULATOR_SERVER_KEY');
+        $payload = [
+            'invoice_code'  => $data['invoice_code'],
+            'name'          => $data['name'],
+            'email'         => $data['email'],
+            'phone'         => $data['phone'],
+            'total_charged' => $data['price'],
+            'items'         => [
+                [
+                    'item_name' => $data['item_name'],
+                    'price'     => $data['price'],
+                    'quantity'  => 1
+                ]
+            ]
+        ];
+
+        $merchant = Merchant::find($data['merchant_id']);
+
+        $publicKey = $merchant->public_key;
+        $serverKey = $merchant->server_key;
 
         try {
             $curl = curl_init();
@@ -74,7 +104,7 @@ class Simulator extends ComponentBase
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => json_encode($data),
+                CURLOPT_POSTFIELDS => json_encode($payload),
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Accept: application/json',
