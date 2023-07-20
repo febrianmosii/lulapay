@@ -1,7 +1,9 @@
 <?php namespace Lulapay\Admin\Controllers;
 
 use BackendMenu;
+use Backend\Widgets\Filter;
 use Backend\Classes\Controller;
+use Event;
 
 /**
  * Admins Back-end Controller
@@ -28,8 +30,34 @@ class Admins extends Controller
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct();        
 
         BackendMenu::setContext('Lulapay.Admin', 'admin', 'admins');
+    }
+
+    public function listFilterExtendScopes($scopes)
+    {
+        $scopes = $scopes->getScopes();
+
+        if ( ! empty($scopes['merchant'])) {
+            Event::listen('backend.list.extendQuery', function($list, $query) use ($scopes){
+                $merchantScope = $scopes['merchant']->value;
+
+                if ( ! empty($merchantScope)) {
+                    $query->whereHas('merchants', function($q) use ($scopes, $merchantScope) {
+                        $merchantId = [];
+
+                            foreach ($merchantScope as $key => $value) {
+                                $merchantId[] = $key;
+                            }
+                            
+                            if ($merchantId) {
+                                $q->whereIn('merchant_id', $merchantId);
+                            }
+                    });
+                }
+            });
+        }
+
     }
 }

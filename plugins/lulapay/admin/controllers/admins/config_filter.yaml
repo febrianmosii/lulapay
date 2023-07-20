@@ -1,0 +1,10 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    merchant:
+        label: Merchant
+        modelClass: Lulapay\Merchant\Models\Merchant
+        nameFrom: name
+        options: getMerchantsOptions
