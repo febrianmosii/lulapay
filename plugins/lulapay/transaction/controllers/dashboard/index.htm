@@ -71,7 +71,18 @@
         <h3>Merchant Transactions</h3>
         <div class="card chart">
             <div class="card-body pos-r apex-chart-container">
-                <div id="donut-merchant-trx" data-chart-type="donut" data-labels="<?= $merchant_transactions['labels'] ?? '' ?>" data-series="<?= $merchant_transactions['series'] ?? ''?>" class="charts apex-chart"></div>
+                <div
+                    class="control-chart centered wrap-legend"
+                    data-control="chart-pie"
+                    data-size="200"
+                    id="pie-chart-trx"
+                    data-center-text="100">
+                    <ul>
+                        <?php foreach ($merchant_transactions as  $transaction) {?>
+                        <li><?= $transaction['name'] ?> <span><?= $transaction['total'] ?></span></li>
+                        <?php } ?>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

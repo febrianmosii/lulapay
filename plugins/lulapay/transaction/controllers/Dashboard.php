@@ -72,7 +72,7 @@ class Dashboard extends Controller
         $this->vars['top_5_payment_merchants']     = $this->top5Merchants();
         $this->vars['latest_10_days_summaries']    = $this->getLatest10Transactions();
         $this->vars['latest_10_days_transactions'] = $this->getLatest10Transactions(false);
-        $this->vars['merchant_transactions']       = $this->getDataChart($merchantTransactions, 'merchant.name');
+        $this->vars['merchant_transactions']       = $merchantTransactions;
     }
 
     private function getLatest10Transactions($count = true) 
@@ -156,7 +156,7 @@ class Dashboard extends Controller
         $labels = $data->pluck($labelName)->toArray();
 
         return [
-            'series' => implode(',', $series),
+            'series' => 12000,10000,123233,
             'labels' => implode(',', $labels),
         ];
     }

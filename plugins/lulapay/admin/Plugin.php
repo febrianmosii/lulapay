@@ -16,14 +16,14 @@ class Plugin extends PluginBase
                 'label'       => 'Admin',
                 'url'         => Backend::url('lulapay/admin/admins'),
                 'icon'        => 'icon-users',
-                'permissions' => ['lulapay.admins.*'],
+                // 'permissions' => ['lulapay.admins.*'],
                 'order'       => 10,
                 'sideMenu' => [
                     'admins' => [
                         'label' => 'Admins',
                         'icon'  => 'icon-users',
                         'url'   => Backend::url('lulapay/admin/admins'),
-                        'permissions' => ['lulapay.admin.access_admins']
+                        // 'permissions' => ['lulapay.admin.access_admins']
                     ],
                     // 'roles' => [
                     //     'label' => 'Roles',

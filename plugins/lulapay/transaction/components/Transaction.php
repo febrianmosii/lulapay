@@ -168,7 +168,19 @@ class Transaction extends ComponentBase
         } catch (\Exception $e) {
             DB::rollBack();
             
+            $log = [
+                'type'                  => 'Error-Log',
+                'transaction_status_id' => $this->transaction->transaction_status_id,
+                'data'                  => json_encode($e->getMessage())
+            ];
+    
+            $this->transaction->transaction_logs()->create($log);
+
             Flash::error($e->getMessage());
+
+            $backUrl = $this->pageUrl('checkout/index', ['transactionHash' => $this->transaction->transaction_hash, 'methodId' => $this->payment_method->id]);
+
+            return Redirect::to($backUrl);
         }
     }
 
