@@ -46,8 +46,9 @@ columns:
         sortable: true
     total:
         label: Total
-        type: number
         searchable: true
+        path: ~/plugins/lulapay/transaction/models/transaction/_total.htm
+        type: partial
         sortable: true
     transaction_status_name:
         label: Status

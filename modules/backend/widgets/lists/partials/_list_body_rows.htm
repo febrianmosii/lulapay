@@ -1,3 +1,17 @@
 <?php foreach ($records as $record): ?>
     <?= $this->makePartial('list_body_row', ['record' => $record, 'treeLevel' => $treeLevel]) ?>
 <?php endforeach ?>
+<?php if ($total > 0) {?>
+    <tr class="rowlink" tabindex="0">
+        <td class="list-cell-index-1 list-cell-name-created_at list-cell-type-datetime   ">
+        </td>   
+        <td class="list-cell-index-2 text-right" colspan="6">
+            <strong>TOTAL</strong>
+        </td>
+        <td class="list-cell-index-2 text-right" colspan="2">
+            <strong>Rp. <?= number_format($total); ?></strong>
+        </td>
+        <td class="list-cell-index-2 text-right" colspan="2">
+        </td>
+    </tr>
+<?php } ?>

@@ -168,19 +168,7 @@ class Transaction extends ComponentBase
         } catch (\Exception $e) {
             DB::rollBack();
             
-            $log = [
-                'type'                  => 'Error-Log',
-                'transaction_status_id' => $this->transaction->transaction_status_id,
-                'data'                  => json_encode($e->getMessage())
-            ];
-    
-            $this->transaction->transaction_logs()->create($log);
-
             Flash::error($e->getMessage());
-
-            $backUrl = $this->pageUrl('checkout/index', ['transactionHash' => $this->transaction->transaction_hash, 'methodId' => $this->payment_method->id]);
-
-            return Redirect::to($backUrl);
         }
     }
 
@@ -215,6 +203,7 @@ class Transaction extends ComponentBase
         $this->page['is_expired']       = $this->transaction->isExpired();
         $this->page['customer']         = $this->transaction->customer;
         $this->page['payment_methods']  = $paymentMethods;
+        $this->page['merchant_name']    = $this->transaction->merchant->name;
         $this->page['transaction_hash'] = $this->transaction->transaction_hash;
         $this->page['items']            = $this->transaction->transaction_details;
     }

@@ -4,6 +4,11 @@ fields:
         span: full
         required: 1
         type: text
+    code:
+        label: Code
+        span: full
+        required: 1
+        type: text
     address:
         label: Address
         span: full

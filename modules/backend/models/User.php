@@ -188,7 +188,17 @@ class User extends UserBase
     {
         $result = [];
 
-        foreach (UserRole::all() as $role) {
+        $user = \BackendAuth::getUser();
+        $userRole = $user->role->code;
+
+        if ($userRole === 'merchant') {
+            $data = UserRole::where('id', '!=', '2')->get();
+        } else {
+            $data = UserRole::all();
+        }
+
+
+        foreach ($data as $role) {
             $result[$role->id] = [$role->name, $role->description];
         }
 
@@ -217,7 +227,16 @@ class User extends UserBase
     {
         $result = [];
 
-        foreach (Merchant::all() as $merchant) {
+        $user = \BackendAuth::getUser();
+        $userRole = $user->role->code;
+
+        if ($userRole === 'merchant') {
+            $data = Merchant::whereIn('id',$user->merchants->pluck('id'))->get();
+        } else {
+            $data = Merchant::all();
+        }
+
+        foreach ($data as $merchant) {
             $optionLabel = $merchant->name;
 
             $result[$merchant->id] = $optionLabel;

@@ -3,6 +3,10 @@
 # ===================================
 
 scopes:
+    created_at:
+        label: Date
+        type: daterange
+        conditions: created_at >= ':after' AND created_at <= ':before'
     payment_method_id:
         label: Payment Method
         modelClass: Lulapay\Transaction\Models\PaymentMethod

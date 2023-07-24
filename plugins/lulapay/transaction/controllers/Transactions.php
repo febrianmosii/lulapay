@@ -37,6 +37,13 @@ class Transactions extends Controller
         BackendMenu::setContext('Lulapay.Transaction', 'transaction', 'transactions');
     }
 
+    public function index()
+    {
+        $data= $this->getCurrentFilters();
+        // dd($data);
+        $this->makeLists();
+    }
+
     public function listExtendQuery($query)
     {
         $user = BackendAuth::getUser();
@@ -177,7 +184,6 @@ class Transactions extends Controller
                 'data'    => $data
             ], $transaction ? 200 : 404);
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
 
             return Response::json([
@@ -187,6 +193,21 @@ class Transactions extends Controller
         }
     }
 
+    function getCurrentFilters()
+    {
+        $filters = [];
+        foreach (\Session::get('widget', []) as $name => $item) {
+            if (str_contains($name, 'Filter')) {
+                $filter = @unserialize(@base64_decode($item));
+                if ($filter) {
+                    $filters[] = $filter;
+                }
+            }
+        }
+
+        return $filters;
+    }
+    
     private function getCustomerId() 
     {
         $customer = Customer::whereEmail($this->transactionData['email'])->first();

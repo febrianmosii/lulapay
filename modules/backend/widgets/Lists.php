@@ -262,6 +262,12 @@ class Lists extends WidgetBase
         $this->vars['sortDirection'] = $this->sortDirection;
         $this->vars['showTree'] = $this->showTree;
         $this->vars['treeLevel'] = 0;
+        
+        try {
+            $this->vars['total'] = $this->records->sum('total');
+        } catch (\Throwable $th) {
+            $this->vars['total'] = 0;
+        }
 
         if ($this->showPagination) {
             $this->vars['pageCurrent'] = $this->records->currentPage();

@@ -60,4 +60,16 @@ class Admins extends Controller
         }
 
     }
+
+    public function listExtendQuery($query)
+    {
+        $user = \BackendAuth::getUser();
+        $userRole = $user->role->code;
+
+        if ($userRole === 'merchant') {
+            $query->whereHas('merchants', function($q) use ($user) {
+                $q->whereIn('merchant_id', $user->merchants->pluck('id'));
+            });
+        }
+    }
 }

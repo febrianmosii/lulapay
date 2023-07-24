@@ -12,3 +12,6 @@
 1.0.5:
     - 'Updated table lulapay_merchant_merchants'
     - builder_table_update_lulapay_merchant_merchants.php
+1.0.6:
+    - 'Updated table lulapay_merchant_merchants'
+    - builder_table_update_lulapay_merchant_merchants_2.php

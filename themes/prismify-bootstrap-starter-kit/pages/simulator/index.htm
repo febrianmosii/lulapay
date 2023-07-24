@@ -27,7 +27,7 @@ meta_description = "Simulate your transaction using Lulapay API here."
           <select class="form-select mb-2" name="merchant_id" required>
             <option value="" selected>Select merchant</option>
             {% for merchant in merchants %}
-              <option value="{{ merchant.id }}">{{ merchant.name }}</option>
+              <option value="{{ merchant.id }}">{{ merchant.name }} - {{ merchant.code }}</option>
             {% endfor %}
           </select>
         </div>
@@ -63,6 +63,7 @@ meta_description = "Simulate your transaction using Lulapay API here."
         <div class="mb-3">
           <label for="nominal" class="form-label">Nominal</label>
           <input type="text" class="form-control item-price mb-2" name="price" min=0 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required />
+          <p class="text-muted">Minimal transaksi Rp. 10.000</p>
         </div>
         <div class="mb-3 text-end">
           <button type="submit" class="btn btn-success">Submit</button>
