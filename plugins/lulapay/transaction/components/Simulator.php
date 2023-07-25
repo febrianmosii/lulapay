@@ -21,6 +21,8 @@ class Simulator extends ComponentBase
 
     public function onRun()
     {
+        $merchant = Merchant::find(1);
+        
         $this->page['merchants'] = Merchant::select('id', 'name', 'code')->get();
     }
 

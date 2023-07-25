@@ -11,6 +11,12 @@ class TransactionDetail extends Model
     
     use \October\Rain\Database\Traits\SoftDelete;
 
+    protected $id;
+    protected $transaction_id;
+    protected $item_name;
+    protected $quantity;
+    protected $price;
+    
     protected $dates = ['deleted_at'];
 
     public $fillable = [

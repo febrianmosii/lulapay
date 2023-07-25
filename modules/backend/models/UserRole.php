@@ -14,10 +14,17 @@ class UserRole extends RoleBase
     const CODE_DEVELOPER = 'developer';
     const CODE_PUBLISHER = 'publisher';
 
+    protected $id;
+    protected $name;
+    protected $code;
+    protected $description;
+    protected $permissions;
+    protected $is_system;
+
     /**
      * @var string The database table used by the model.
      */
-    protected $table = 'backend_user_roles';
+    public $table = 'backend_user_roles';
 
     /**
      * @var array Validation rules

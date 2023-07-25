@@ -11,6 +11,11 @@ class Customer extends Model
     
     use \October\Rain\Database\Traits\SoftDelete;
 
+    protected $id;
+    protected $name;
+    protected $email;
+    protected $phone;
+    
     protected $dates = ['deleted_at'];
 
     public $fillable = [

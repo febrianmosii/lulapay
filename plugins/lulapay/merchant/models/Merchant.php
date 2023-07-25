@@ -16,6 +16,11 @@ class Merchant extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $id;
+    protected $code;
+    protected $admin_phone;
+    protected $admin_email;
+    protected $notif_callback_url;
 
     /**
      * @var string The database table used by the model.
@@ -37,7 +42,6 @@ class Merchant extends Model
         'logo' => 'System\Models\File'
     ];
 
-
     /**
      * Relations
      */
@@ -50,17 +54,6 @@ class Merchant extends Model
         $this->public_key = Uuid::uuid4()->toString();
         $this->server_key = Uuid::uuid4()->toString();
     }   
-
-    // public function getPaymentMethodsOptions() 
-    // {
-    //     $result = [];
-
-    //     foreach (PaymentMethod::all() as $method) {
-    //         $result[$method->id] = [$method->payment_gateway_provider->name.' - '.$method->name, $method->payment_method_type->name];
-    //     }
-
-    //     return $result;
-    // }
 
     public function getPaymentMethodsOptions()
     {

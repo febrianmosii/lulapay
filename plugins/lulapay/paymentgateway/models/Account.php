@@ -13,6 +13,13 @@ class Account extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $id;
+    protected $provider_id;
+    protected $name;
+    protected $merchant_key;
+    protected $client_key;
+    protected $server_key;
+    protected $api_host;
 
     public $belongsTo = [ 
         'provider' => 'Lulapay\PaymentGateway\Models\Provider',

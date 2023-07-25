@@ -14,6 +14,18 @@ class Transaction extends Model
     
     use \October\Rain\Database\Traits\SoftDelete;
 
+    protected $id;
+    protected $merchant_id;
+    protected $payment_method_id;
+    protected $invoice_code;
+    protected $transaction_hash;
+    protected $transaction_status_id;
+    protected $total;
+    protected $created_at;
+    protected $updated_at;
+    protected $customer_id;
+    protected $expired_time;
+    
     protected $dates = ['deleted_at'];
 
     public $fillable = [
