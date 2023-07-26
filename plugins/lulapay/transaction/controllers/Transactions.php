@@ -39,8 +39,6 @@ class Transactions extends Controller
 
     public function index()
     {
-        $data= $this->getCurrentFilters();
-        // dd($data);
         $this->makeLists();
     }
 
