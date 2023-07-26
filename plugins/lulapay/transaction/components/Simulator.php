@@ -56,6 +56,7 @@ class Simulator extends ComponentBase
         try {
             $response = $this->createTransactionWithAPI($post);
 
+            dd($response);
             if ($response['error']) {
                 throw new \Exception($response['message']);
             } else {
@@ -116,7 +117,7 @@ class Simulator extends ComponentBase
             ));
 
             $response = curl_exec($curl);
-
+            print_r($response);exit();
             return json_decode($response, TRUE);
             
             curl_close($curl);  

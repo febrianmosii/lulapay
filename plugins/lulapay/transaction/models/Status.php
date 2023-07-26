@@ -11,10 +11,6 @@ class Status extends Model
     
     use \October\Rain\Database\Traits\SoftDelete;
 
-    protected $id;
-    protected $name;
-    protected $code;
-    
     protected $dates = ['deleted_at'];
 
     protected $fillable = [

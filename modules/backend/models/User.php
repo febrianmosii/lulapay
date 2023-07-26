@@ -17,15 +17,6 @@ class User extends UserBase
 {
     use \October\Rain\Database\Traits\SoftDelete;
 
-    protected $id;
-    protected $first_name;
-    protected $last_name;
-    protected $login;
-    protected $email;
-    protected $password;
-    protected $persist_code;
-    protected $role_id;
-
     /**
      * @var string The database table used by the model.
      */

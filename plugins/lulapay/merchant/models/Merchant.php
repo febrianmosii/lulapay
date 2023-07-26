@@ -16,12 +16,6 @@ class Merchant extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $id;
-    protected $code;
-    protected $admin_phone;
-    protected $admin_email;
-    protected $notif_callback_url;
-
     /**
      * @var string The database table used by the model.
      */

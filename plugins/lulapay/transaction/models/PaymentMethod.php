@@ -11,15 +11,6 @@ class PaymentMethod extends Model
     
     use \October\Rain\Database\Traits\SoftDelete;
 
-    protected $id;
-    protected $payment_gateway_provider_id;
-    protected $name;
-    protected $code;
-    protected $payment_method_type_id;
-    protected $description;
-    protected $sandbox_simulator_url;
-    protected $is_active;
-
     protected $dates = ['deleted_at'];
 
     /**

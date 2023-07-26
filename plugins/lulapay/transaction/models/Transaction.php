@@ -2,7 +2,6 @@
 
 use Lulapay\Transaction\Models\TransactionLog;
 use Model;
-use Ramsey\Uuid\Uuid;
 use Mail;
 
 /**
@@ -14,18 +13,6 @@ class Transaction extends Model
     
     use \October\Rain\Database\Traits\SoftDelete;
 
-    protected $id;
-    protected $merchant_id;
-    protected $payment_method_id;
-    protected $invoice_code;
-    protected $transaction_hash;
-    protected $transaction_status_id;
-    protected $total;
-    protected $created_at;
-    protected $updated_at;
-    protected $customer_id;
-    protected $expired_time;
-    
     protected $dates = ['deleted_at'];
 
     public $fillable = [
@@ -99,7 +86,7 @@ class Transaction extends Model
 
     public function onCheckStatus()
     {
-        
+        return $this->transaction_status_id;
     }
 
     public function getTrxId()
@@ -155,6 +142,7 @@ class Transaction extends Model
             $transactionStatusId = $mapStatusMidtrans[$status] ?? '';
 
             if ($transactionStatusId && $transactionStatusId !== $currentStatus) {
+                dd($this->transaction_status_id);
                 $this->transaction_status_id = $transactionStatusId;
                 $this->save();
             }
