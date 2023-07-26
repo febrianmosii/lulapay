@@ -177,7 +177,7 @@ class Transaction extends ComponentBase
         $isSelectedMethod = $this->isSelectedMethod();
 
         if ($isSelectedMethod) {    
-            $payUrl    = $this->pageUrl('checkout/payment', ['transactionHash' => $this->transaction->transaction_hash, 'methodId' => $this->transaction->payment_method_id]);
+            $payUrl = $this->pageUrl('checkout/payment', ['transactionHash' => $this->transaction->transaction_hash, 'methodId' => $this->transaction->payment_method_id]);
             
             return Redirect::to($payUrl);
         }
@@ -240,7 +240,6 @@ class Transaction extends ComponentBase
     private function getTrxByTransactionHash()
     {
         $transactionHash = $this->param('transactionHash');
-
 
         return TransactionModel::with(['merchant', 'merchant.payment_methods'=> function($q){
             $q->whereIsActive(TRUE);

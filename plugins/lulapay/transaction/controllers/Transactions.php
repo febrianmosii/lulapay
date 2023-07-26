@@ -14,7 +14,6 @@ use Lulapay\Transaction\Models\Customer;
 use Lulapay\Transaction\Models\Transaction;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
-use Ramsey\Uuid\Uuid;
 
 
 class Transactions extends Controller
@@ -55,9 +54,6 @@ class Transactions extends Controller
 
     public function create(Request $request)
     {
-        $transaction = Transaction::find(97);
-        $transaction->setStatus('settlement', 'midtrans');
-        dd('ok');
         // Retrieve the request data
         $this->transactionData = Input::all();
 
@@ -106,13 +102,10 @@ class Transactions extends Controller
         
         // Create TRX
         $insert = [
-            'invoice_code'          => $this->transactionData['invoice_code'],
-            'merchant_id'           => $request->merchant->id,
-            'customer_id'           => $this->getCustomerId(),
-            'total'                 => $this->transactionData['total_charged'],
-            'transaction_status_id' => 1,
-            'transaction_hash'      => Uuid::uuid4()->toString(),
-            'expired_timee'         => date('Y-m-d H:i:s', strtotime('+ 30 minutes'))
+            'invoice_code' => $this->transactionData['invoice_code'],
+            'merchant_id'  => $request->merchant->id,
+            'customer_id'  => $this->getCustomerId(),
+            'total'        => $this->transactionData['total_charged'],
         ];
 
         try {

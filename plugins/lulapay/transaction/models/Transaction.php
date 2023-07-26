@@ -3,6 +3,7 @@
 use Lulapay\Transaction\Models\TransactionLog;
 use Model;
 use Mail;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Model
