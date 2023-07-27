@@ -1,6 +1,7 @@
 <?php namespace Lulapay\Transaction\Components;
 
 use Validator;
+use Flash;
 use Lulapay\Merchant\Models\Merchant;
 use Cms\Classes\ComponentBase;
 
@@ -68,6 +69,46 @@ class Simulator extends ComponentBase
         }
         
         return \Redirect::to($this->page['url']);
+    }
+
+    public function onSearchMerchant()
+    {
+        $post = \Input::post();
+
+        // Validate the input data
+        $rules = [
+            'merchant_code' => 'required|string|max:255'
+        ];
+
+        $message = [
+            'merchant_code.required' => 'Kode merchant wajib diisi.'
+        ];
+        
+        $validator = Validator::make($post, $rules, $message);
+
+        // If validation fails, display error messages
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first());
+        }
+
+        $errorMessage = "Sedang terjadi gangguan jaringan, coba lagi nanti";
+
+        try {
+            $merchant = Merchant::whereCode($post['merchant_code'])->first();
+
+            if ( ! $merchant) {
+                Flash::error("Merchant not found");
+            } else {
+                return response()->json([
+                    'merchant_id'   => $merchant->id,
+                    'merchant_name' => $merchant->name,
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+            throw new \Exception($errorMessage);
+        }
     }
 
     public function createTransactionWithAPI($data) 

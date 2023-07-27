@@ -9,6 +9,12 @@ function delay(callback, ms) {
   };
 }
 
+function populateMerchantName(data) {
+  if (typeof data.merchant_id !== "undefined" && typeof data.merchant_name !== "undefined") {
+    $('#merchant-id').val(data.merchant_id)
+    $('#merchant-name').val(data.merchant_name)
+  }
+}
 
 $(document).on("keyup",".item-price", delay(function (e) {
   console.log('!!');
