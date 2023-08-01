@@ -16,6 +16,16 @@ function populateMerchantName(data) {
   }
 }
 
+$(document).on("keypress","#merchant-code", delay(function (e) {
+  e.preventDefault();
+
+  if(e.which == 13) {
+    $('#btn-search').trigger('click');
+  }
+
+  $('#merchant-code').focus();
+}));
+
 $(document).on("keyup",".item-price", delay(function (e) {
   console.log('!!');
 }, 500));
