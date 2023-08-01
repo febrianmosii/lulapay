@@ -143,7 +143,6 @@ class Transaction extends Model
             $transactionStatusId = $mapStatusMidtrans[$status] ?? '';
 
             if ($transactionStatusId && $transactionStatusId !== $currentStatus) {
-                dd($this->transaction_status_id);
                 $this->transaction_status_id = $transactionStatusId;
                 $this->save();
             }
