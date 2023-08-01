@@ -22,7 +22,7 @@ class Dashboard extends Controller
         $user = BackendAuth::getUser();
 
         // Set the page title
-        $this->pageTitle = 'Custom Page';
+        $this->pageTitle = 'Dashboard';
         $this->user      = $user;
         $this->userRole  = $user->role->code;
 

@@ -37,11 +37,6 @@ class Transactions extends Controller
         BackendMenu::setContext('Lulapay.Transaction', 'transaction', 'transactions');
     }
 
-    public function index()
-    {
-        $this->makeLists();
-    }
-
     public function listExtendQuery($query)
     {
         $user = BackendAuth::getUser();
