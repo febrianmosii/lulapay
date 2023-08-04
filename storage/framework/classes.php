@@ -282,4 +282,5 @@
   'System\\Models\\MailPartial' => 'modules/system/models/MailPartial.php',
   'Backend\\FormWidgets\\PermissionEditor' => 'modules/backend/formwidgets/PermissionEditor.php',
   'System\\Twig\\Engine' => 'modules/system/twig/Engine.php',
+  'System\\Models\\PluginVersion' => 'modules/system/models/PluginVersion.php',
 );
